@@ -23,10 +23,10 @@ export function NoteItem({ note, active, onSelect, onDelete, onTogglePin }: Note
 
   return (
     <div
-      className={`group relative flex flex-col gap-1 p-3 cursor-pointer rounded-xl transition-all duration-200 ${
+      className={`group flex flex-col gap-1 p-3 cursor-pointer rounded-xl transition-all duration-200 border border-transparent ${
         active
-          ? 'bg-primary/90 text-primary-content shadow-lg shadow-primary/20'
-          : 'hover:bg-white/60 hover:shadow-sm'
+          ? 'bg-primary text-primary-content shadow-md'
+          : 'hover:bg-base-200/70 hover:border-base-300/50'
       }`}
       onClick={() => onSelect(note.id)}
     >
@@ -46,7 +46,7 @@ export function NoteItem({ note, active, onSelect, onDelete, onTogglePin }: Note
             className={`btn btn-xs btn-square min-h-6 h-6 w-6 border-0 ${
               note.pinned
                 ? (active ? 'bg-primary-content/20 text-primary-content' : 'bg-primary/10 text-primary')
-                : (active ? 'btn-ghost hover:bg-primary-content/20 text-primary-content/70' : 'btn-ghost hover:bg-base-200 text-base-content/40')
+                : (active ? 'btn-ghost hover:bg-primary-content/20 text-primary-content/70' : 'btn-ghost hover:bg-base-300/50 text-base-content/40')
             }`}
             onClick={(e) => {
               e.stopPropagation();
