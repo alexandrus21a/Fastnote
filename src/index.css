@@ -119,6 +119,20 @@ body.theme-liquid-glass .modal-enter {
   animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Liquid glass icon colors */
+body.theme-liquid-glass svg {
+  color: inherit;
+}
+body.theme-liquid-glass .text-base-content\/30 svg,
+body.theme-liquid-glass .text-base-content\/40 svg,
+body.theme-liquid-glass .text-base-content\/50 svg {
+  opacity: 0.55;
+}
+body.theme-liquid-glass .text-base-content\/60 svg,
+body.theme-liquid-glass .text-base-content\/70 svg {
+  opacity: 0.75;
+}
+
 @keyframes modalIn {
   from {
     opacity: 0;
@@ -210,6 +224,20 @@ body.theme-win96 .markdown-preview pre {
 body.theme-win96 .markdown-preview code {
   background: #e0e0e0;
   border-radius: 0;
+}
+
+/* Win96 icon colors */
+body.theme-win96 svg {
+  color: #000;
+}
+body.theme-win96 .bg-primary svg,
+body.theme-win96 .text-primary-content svg {
+  color: #fff;
+}
+body.theme-win96 .text-base-content\/30 svg,
+body.theme-win96 .text-base-content\/40 svg,
+body.theme-win96 .text-base-content\/50 svg {
+  opacity: 0.6;
 }
 
 body.theme-win96 ::-webkit-scrollbar {
@@ -390,6 +418,38 @@ body.theme-hacker ::-webkit-scrollbar-track {
 body.theme-hacker ::-webkit-scrollbar-thumb {
   background: #004400;
   border: 1px solid #00ff41;
+}
+
+/* Hacker icon colors */
+body.theme-hacker svg {
+  color: #00ff41;
+}
+body.theme-hacker .bg-primary svg,
+body.theme-hacker .text-primary-content svg {
+  color: #000;
+}
+body.theme-hacker .btn svg {
+  color: #00ff41;
+}
+body.theme-hacker .btn-primary svg {
+  color: #000;
+}
+body.theme-hacker .alert-info svg {
+  color: #00aaff;
+}
+body.theme-hacker .alert-success svg {
+  color: #00ff41;
+}
+body.theme-hacker .alert-warning svg {
+  color: #ffcc00;
+}
+body.theme-hacker .alert-error svg {
+  color: #ff0044;
+}
+body.theme-hacker .text-base-content\/30 svg,
+body.theme-hacker .text-base-content\/40 svg,
+body.theme-hacker .text-base-content\/50 svg {
+  opacity: 0.7;
 }
 
 /* CRT scanline effect for hacker theme */
