@@ -4,6 +4,7 @@ import {
   Bold, Italic, Heading, List, ListOrdered, Link, Quote, Code,
   Eye, EyeOff, Menu, Strikethrough, CheckSquare, Image,
   SeparatorHorizontal, Download, Search, X, ChevronUp, ChevronDown,
+  PenLine,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -19,9 +20,10 @@ interface NoteEditorProps {
   editorMode: EditorMode;
   onUpdate: (id: string, updates: Partial<Pick<Note, 'title' | 'content'>>) => void;
   onToggleSidebar: () => void;
+  onCreate: () => void;
 }
 
-export function NoteEditor({ note, editorMode, onUpdate, onToggleSidebar }: NoteEditorProps) {
+export function NoteEditor({ note, editorMode, onUpdate, onToggleSidebar, onCreate }: NoteEditorProps) {
   const { t } = useTranslation();
   const [preview, setPreview] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
@@ -204,7 +206,13 @@ export function NoteEditor({ note, editorMode, onUpdate, onToggleSidebar }: Note
             <line x1="10" y1="9" x2="8" y2="9" />
           </svg>
         </div>
-        <p className="text-base font-medium">{t('selectOrCreate')}</p>
+        <button
+          className="btn btn-primary gap-2 shadow-md"
+          onClick={onCreate}
+        >
+          <PenLine size={16} />
+          {t('writeNewNote')}
+        </button>
       </div>
     );
   }

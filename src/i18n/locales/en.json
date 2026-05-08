@@ -20,6 +20,7 @@
   "unpin": "Unpin",
   "delete": "Delete",
   "selectOrCreate": "Select a note or create a new one",
+  "writeNewNote": "Write new note",
   "noteTitle": "Note title...",
   "startWriting": "Start writing in markdown...",
   "startWritingSimple": "Start writing...",

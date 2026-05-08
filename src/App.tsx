@@ -69,6 +69,10 @@ export default function App() {
         editorMode={settings.editorMode}
         onUpdate={updateNote}
         onToggleSidebar={() => setSidebarOpen((s) => !s)}
+        onCreate={() => {
+          createNote();
+          setSidebarOpen(false);
+        }}
       />
 
       <SettingsModal

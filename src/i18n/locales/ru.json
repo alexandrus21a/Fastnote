@@ -20,6 +20,7 @@
   "unpin": "Открепить",
   "delete": "Удалить",
   "selectOrCreate": "Выберите заметку или создайте новую",
+  "writeNewNote": "Написать новую заметку",
   "noteTitle": "Название заметки...",
   "startWriting": "Начните писать в markdown...",
   "startWritingSimple": "Начните писать...",

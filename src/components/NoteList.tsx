@@ -42,7 +42,7 @@ export function NoteList({
       )}
 
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-80 flex flex-col transition-transform duration-300 ease-out ${
+        className={`fixed lg:relative inset-y-0 left-0 z-50 w-80 flex flex-col lg:flex-shrink-0 transition-transform duration-300 ease-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
@@ -124,7 +124,6 @@ export function NoteList({
                     active={note.id === activeNoteId}
                     onSelect={(id) => {
                       onSelect(id);
-                      onToggleSidebar();
                     }}
                     onDelete={onDelete}
                     onTogglePin={onTogglePin}
@@ -144,7 +143,6 @@ export function NoteList({
                     active={note.id === activeNoteId}
                     onSelect={(id) => {
                       onSelect(id);
-                      onToggleSidebar();
                     }}
                     onDelete={onDelete}
                     onTogglePin={onTogglePin}
