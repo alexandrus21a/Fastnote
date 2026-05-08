@@ -23,10 +23,10 @@ export function NoteItem({ note, active, onSelect, onDelete, onTogglePin }: Note
 
   return (
     <div
-      className={`group flex flex-col gap-1 p-3 cursor-pointer rounded-xl transition-all duration-200 border border-transparent ${
+      className={`group flex flex-col gap-1 p-3 cursor-pointer rounded-xl transition-all duration-200 ${
         active
-          ? 'bg-primary text-primary-content shadow-md'
-          : 'hover:bg-base-200/70 hover:border-base-300/50'
+          ? 'bg-primary text-primary-content shadow-md border border-primary'
+          : 'bg-base-100/60 border border-base-300/40 hover:bg-base-200 hover:border-base-300/70 hover:shadow-sm'
       }`}
       onClick={() => onSelect(note.id)}
     >
