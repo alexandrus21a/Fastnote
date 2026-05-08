@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Bold, Italic, Heading, List, ListOrdered, Link, Quote, Code,
   Eye, EyeOff, Menu, Strikethrough, CheckSquare, Image,
-  SeparatorHorizontal, Download,
+  SeparatorHorizontal, Download, Search, X, ChevronUp, ChevronDown,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -25,8 +25,12 @@ export function NoteEditor({ note, editorMode, onUpdate, onToggleSidebar }: Note
   const { t } = useTranslation();
   const [preview, setPreview] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchIndex, setSearchIndex] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
 
   useEffect(() => {
@@ -34,6 +38,39 @@ export function NoteEditor({ note, editorMode, onUpdate, onToggleSidebar }: Note
       textareaRef.current.focus();
     }
   }, [note?.id, preview]);
+
+  useEffect(() => {
+    setSearchIndex(0);
+  }, [searchQuery, note?.id]);
+
+  const matches = useMemo(() => {
+    if (!searchQuery || !note) return [];
+    const q = searchQuery.toLowerCase();
+    const text = note.content.toLowerCase();
+    const positions: number[] = [];
+    let i = text.indexOf(q);
+    while (i !== -1) {
+      positions.push(i);
+      i = text.indexOf(q, i + 1);
+    }
+    return positions;
+  }, [searchQuery, note?.content]);
+
+  const goToMatch = useCallback((dir: 'next' | 'prev') => {
+    if (matches.length === 0) return;
+    setSearchIndex((prev) => {
+      if (dir === 'next') return (prev + 1) % matches.length;
+      return (prev - 1 + matches.length) % matches.length;
+    });
+  }, [matches.length]);
+
+  useEffect(() => {
+    if (!searchQuery || !textareaRef.current || matches.length === 0) return;
+    const pos = matches[searchIndex];
+    const el = textareaRef.current;
+    el.setSelectionRange(pos, pos + searchQuery.length);
+    el.focus();
+  }, [searchIndex, matches, searchQuery]);
 
   const insertText = useCallback(
     (before: string, after: string = '') => {
@@ -174,6 +211,8 @@ export function NoteEditor({ note, editorMode, onUpdate, onToggleSidebar }: Note
 
   const isSimple = editorMode === 'simple';
 
+  // Highlight logic is handled via textarea selectionRange
+
   return (
     <div className="flex-1 flex flex-col min-w-0 p-3">
       <div className="glass-panel-strong rounded-2xl flex flex-col h-full overflow-hidden">
@@ -190,6 +229,15 @@ export function NoteEditor({ note, editorMode, onUpdate, onToggleSidebar }: Note
             onChange={(e) => onUpdate(note.id, { title: e.target.value })}
           />
           <div className="flex items-center gap-1">
+            {!isSimple && (
+              <button
+                className={`btn btn-ghost btn-xs btn-square min-h-8 h-8 w-8 hidden sm:flex ${searchOpen ? 'bg-base-200' : ''}`}
+                onClick={() => { setSearchOpen((s) => !s); setTimeout(() => searchInputRef.current?.focus(), 50); }}
+                title="Search in note"
+              >
+                <Search size={14} />
+              </button>
+            )}
             {!isSimple && (
               <button
                 className={`btn btn-ghost btn-xs btn-square min-h-8 h-8 w-8 hidden sm:flex ${preview ? 'bg-base-200' : ''}`}
@@ -216,6 +264,39 @@ export function NoteEditor({ note, editorMode, onUpdate, onToggleSidebar }: Note
             </div>
           </div>
         </div>
+
+        {/* Search bar */}
+        {searchOpen && !isSimple && (
+          <div className="px-5 py-2 border-b border-black/5 flex items-center gap-2">
+            <Search size={14} className="text-base-content/40" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              className="input input-sm input-ghost flex-1 h-8 px-0 text-sm"
+              placeholder="Find in note..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') goToMatch('next');
+                if (e.key === 'Escape') { setSearchOpen(false); setSearchQuery(''); }
+              }}
+            />
+            {matches.length > 0 && (
+              <span className="text-xs text-base-content/50 whitespace-nowrap">
+                {searchIndex + 1} / {matches.length}
+              </span>
+            )}
+            <button className="btn btn-ghost btn-xs btn-square min-h-7 h-7 w-7" onClick={() => goToMatch('prev')} disabled={matches.length === 0}>
+              <ChevronUp size={14} />
+            </button>
+            <button className="btn btn-ghost btn-xs btn-square min-h-7 h-7 w-7" onClick={() => goToMatch('next')} disabled={matches.length === 0}>
+              <ChevronDown size={14} />
+            </button>
+            <button className="btn btn-ghost btn-xs btn-square min-h-7 h-7 w-7" onClick={() => { setSearchOpen(false); setSearchQuery(''); }}>
+              <X size={14} />
+            </button>
+          </div>
+        )}
 
         {/* Markdown toolbar */}
         {!isSimple && (

@@ -1,6 +1,54 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* ========== CUSTOM LIGHT THEME OVERRIDES ========== */
+[data-theme="light"] {
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(96.7% 0.003 264);
+  --color-base-300: oklch(92.2% 0.006 264);
+  --color-base-content: oklch(21.5% 0.012 264);
+  --color-primary: oklch(55.5% 0.163 18.5);
+  --color-primary-content: oklch(98.5% 0.001 17);
+  --color-secondary: oklch(55.2% 0.016 248);
+  --color-secondary-content: oklch(98.4% 0.009 248);
+  --color-accent: oklch(59.6% 0.145 163);
+  --color-accent-content: oklch(97.5% 0.011 166);
+  --color-neutral: oklch(27.4% 0.006 286);
+  --color-neutral-content: oklch(98.7% 0 0);
+  --color-info: oklch(68.3% 0.148 237);
+  --color-info-content: oklch(98.6% 0.007 243);
+  --color-success: oklch(62.7% 0.165 149);
+  --color-success-content: oklch(98.2% 0.006 156);
+  --color-warning: oklch(78.7% 0.163 65.5);
+  --color-warning-content: oklch(26.8% 0.043 64);
+  --color-error: oklch(57.7% 0.245 27.3);
+  --color-error-content: oklch(97.5% 0.013 23);
+}
+
+/* ========== CUSTOM DARK THEME OVERRIDES ========== */
+[data-theme="dark"] {
+  --color-base-100: oklch(21.5% 0.012 264);
+  --color-base-200: oklch(17.8% 0.009 264);
+  --color-base-300: oklch(15.2% 0.007 264);
+  --color-base-content: oklch(94.1% 0.005 286);
+  --color-primary: oklch(60.2% 0.177 18.5);
+  --color-primary-content: oklch(26.8% 0.043 23);
+  --color-secondary: oklch(63.7% 0.017 248);
+  --color-secondary-content: oklch(11.2% 0.018 248);
+  --color-accent: oklch(64.6% 0.155 163);
+  --color-accent-content: oklch(10.2% 0.035 166);
+  --color-neutral: oklch(37.4% 0.006 286);
+  --color-neutral-content: oklch(93.7% 0.005 286);
+  --color-info: oklch(68.3% 0.148 237);
+  --color-info-content: oklch(98.6% 0.007 243);
+  --color-success: oklch(62.7% 0.165 149);
+  --color-success-content: oklch(98.2% 0.006 156);
+  --color-warning: oklch(78.7% 0.163 65.5);
+  --color-warning-content: oklch(26.8% 0.043 64);
+  --color-error: oklch(57.7% 0.245 27.3);
+  --color-error-content: oklch(97.5% 0.013 23);
+}
+
 html, body, #root {
   height: 100%;
 }
@@ -582,4 +630,11 @@ body.theme-hacker::after {
 .markdown-preview img {
   border-radius: 0.5rem;
   max-width: 100%;
+}
+
+/* ========== IN-NOTE SEARCH HIGHLIGHT ========== */
+.editor-search-highlight {
+  background: oklch(var(--a) / 0.35);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px oklch(var(--a) / 0.5);
 }
