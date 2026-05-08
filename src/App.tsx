@@ -26,6 +26,8 @@ export default function App() {
 
   const { settings, setSettings } = useSettings();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const isMagicMathOn = settings.magicMath === 'on';
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
@@ -67,6 +69,7 @@ export default function App() {
       <NoteEditor
         note={activeNote}
         editorMode={settings.editorMode}
+        magicMath={isMagicMathOn}
         onUpdate={updateNote}
         onToggleSidebar={() => setSidebarOpen((s) => !s)}
         onCreate={() => {
@@ -80,8 +83,10 @@ export default function App() {
         notes={notes}
         theme={settings.theme}
         editorMode={settings.editorMode}
+        magicMath={settings.magicMath}
         onThemeChange={(theme) => setSettings({ theme })}
         onEditorModeChange={(editorMode) => setSettings({ editorMode })}
+        onMagicMathChange={(magicMath) => setSettings({ magicMath })}
         onImport={setAllNotes}
         onClose={() => setSettingsOpen(false)}
       />

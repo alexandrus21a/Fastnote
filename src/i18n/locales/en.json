@@ -21,6 +21,8 @@
   "delete": "Delete",
   "selectOrCreate": "Select a note or create a new one",
   "writeNewNote": "Write new note",
+  "magicMath": "Magic Math",
+  "magicMathDesc": "Type \"1+1=\" and the result \"2\" appears automatically.",
   "noteTitle": "Note title...",
   "startWriting": "Start writing in markdown...",
   "startWritingSimple": "Start writing...",

@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Download, Upload, Lock, FileJson, Palette, Type, Settings, Sparkles, Monitor, Terminal } from 'lucide-react';
 import type { Note } from '../types/note';
-import type { AppTheme, EditorMode } from '../hooks/useSettings';
+import type { AppTheme, EditorMode, MagicMathMode } from '../hooks/useSettings';
 import { encryptData, decryptData, type EncryptedBundle } from '../utils/crypto';
 
 interface SettingsModalProps {
@@ -10,8 +10,10 @@ interface SettingsModalProps {
   notes: Note[];
   theme: AppTheme;
   editorMode: EditorMode;
+  magicMath: MagicMathMode;
   onThemeChange: (theme: AppTheme) => void;
   onEditorModeChange: (mode: EditorMode) => void;
+  onMagicMathChange: (mode: MagicMathMode) => void;
   onImport: (notes: Note[]) => void;
   onClose: () => void;
 }
@@ -32,8 +34,10 @@ export function SettingsModal({
   notes,
   theme,
   editorMode,
+  magicMath,
   onThemeChange,
   onEditorModeChange,
+  onMagicMathChange,
   onImport,
   onClose,
 }: SettingsModalProps) {
@@ -83,14 +87,14 @@ export function SettingsModal({
   const tabButton = (key: typeof tab, Icon: typeof Palette, label: string) => (
     <button
       onClick={() => setTab(key)}
-      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+      className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
         tab === key
           ? 'bg-primary text-primary-content shadow-md shadow-primary/25'
           : 'hover:bg-base-200 text-base-content/60'
       }`}
     >
-      <Icon size={15} />
-      {label}
+      <Icon size={14} />
+      <span className="truncate">{label}</span>
     </button>
   );
 
@@ -111,7 +115,7 @@ export function SettingsModal({
         </div>
 
         {/* Tabs */}
-        <div className="px-6 pt-4 pb-2 flex gap-1">
+        <div className="px-6 pt-4 pb-2 flex flex-wrap gap-1.5">
           {tabButton('appearance', Palette, t('appearance') || 'Appearance')}
           {tabButton('editor', Type, t('editor') || 'Editor')}
           {tabButton('data', FileJson, t('data') || 'Data')}
@@ -145,7 +149,7 @@ export function SettingsModal({
                 <label className="text-xs font-bold tracking-widest uppercase text-base-content/40">
                   {t('theme') || 'Theme'}
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {THEMES.map((th) => {
                     const Icon = th.icon;
                     return (
@@ -169,29 +173,54 @@ export function SettingsModal({
           )}
 
           {tab === 'editor' && (
-            <div className="space-y-3">
-              <label className="text-xs font-bold tracking-widest uppercase text-base-content/40">
-                {t('editorMode') || 'Default Editor Mode'}
-              </label>
-              <div className="flex gap-2">
-                <button
-                  className={`btn btn-sm flex-1 rounded-xl ${editorMode === 'markdown' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
-                  onClick={() => onEditorModeChange('markdown')}
-                >
-                  Markdown
-                </button>
-                <button
-                  className={`btn btn-sm flex-1 rounded-xl ${editorMode === 'simple' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
-                  onClick={() => onEditorModeChange('simple')}
-                >
-                  {t('simpleNote') || 'Simple Note'}
-                </button>
+            <div className="space-y-5">
+              <div className="space-y-3">
+                <label className="text-xs font-bold tracking-widest uppercase text-base-content/40">
+                  {t('editorMode') || 'Default Editor Mode'}
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <button
+                    className={`btn btn-sm flex-1 rounded-xl ${editorMode === 'markdown' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
+                    onClick={() => onEditorModeChange('markdown')}
+                  >
+                    Markdown
+                  </button>
+                  <button
+                    className={`btn btn-sm flex-1 rounded-xl ${editorMode === 'simple' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
+                    onClick={() => onEditorModeChange('simple')}
+                  >
+                    {t('simpleNote') || 'Simple Note'}
+                  </button>
+                </div>
+                <p className="text-xs text-base-content/40 leading-relaxed">
+                  {editorMode === 'markdown'
+                    ? (t('markdownDesc') || 'Full markdown support with preview, toolbar, and formatting.')
+                    : (t('simpleDesc') || 'Plain text editor without markdown features.')}
+                </p>
               </div>
-              <p className="text-xs text-base-content/40 leading-relaxed">
-                {editorMode === 'markdown'
-                  ? (t('markdownDesc') || 'Full markdown support with preview, toolbar, and formatting.')
-                  : (t('simpleDesc') || 'Plain text editor without markdown features.')}
-              </p>
+
+              <div className="space-y-3">
+                <label className="text-xs font-bold tracking-widest uppercase text-base-content/40">
+                  {t('magicMath') || 'Magic Math'}
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <button
+                    className={`btn btn-sm flex-1 rounded-xl ${magicMath === 'on' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
+                    onClick={() => onMagicMathChange('on')}
+                  >
+                    {t('on') || 'On'}
+                  </button>
+                  <button
+                    className={`btn btn-sm flex-1 rounded-xl ${magicMath === 'off' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
+                    onClick={() => onMagicMathChange('off')}
+                  >
+                    {t('off') || 'Off'}
+                  </button>
+                </div>
+                <p className="text-xs text-base-content/40 leading-relaxed">
+                  {t('magicMathDesc') || 'Type "1+1=" and the result "2" appears automatically.'}
+                </p>
+              </div>
             </div>
           )}
 

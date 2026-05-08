@@ -2,17 +2,20 @@ import { useState, useEffect, useCallback } from 'react';
 
 export type EditorMode = 'markdown' | 'simple';
 export type AppTheme = 'light' | 'dark' | 'pink' | 'forest' | 'luxury' | 'liquid-glass' | 'win96' | 'hacker';
+export type MagicMathMode = 'off' | 'on';
 
 const SETTINGS_KEY = 'fastnote:settings';
 
 export interface AppSettings {
   theme: AppTheme;
   editorMode: EditorMode;
+  magicMath: MagicMathMode;
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
   theme: 'light',
   editorMode: 'markdown',
+  magicMath: 'off',
 };
 
 function loadSettings(): AppSettings {
