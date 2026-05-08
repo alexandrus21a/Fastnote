@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -7,6 +7,22 @@
     <meta name="theme-color" content="#1f2937" />
     <meta name="description" content="Offline markdown note app with AES-encrypted import/export" />
     <title>Fastnote</title>
+    <script>
+      (function() {
+        try {
+          var s = localStorage.getItem('fastnote:settings');
+          if (s) {
+            var t = JSON.parse(s).theme;
+            if (t && ['pink','forest','luxury','light','dark'].indexOf(t) > -1) {
+              document.documentElement.setAttribute('data-theme', t);
+            }
+            if (t && ['liquid-glass','win96','hacker'].indexOf(t) > -1) {
+              document.body.classList.add('theme-' + t);
+            }
+          }
+        } catch(e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

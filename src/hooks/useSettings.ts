@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 export type EditorMode = 'markdown' | 'simple';
-export type AppTheme = 'pink' | 'forest' | 'luxury' | 'liquid-glass' | 'win96' | 'hacker';
+export type AppTheme = 'light' | 'dark' | 'pink' | 'forest' | 'luxury' | 'liquid-glass' | 'win96' | 'hacker';
 
 const SETTINGS_KEY = 'fastnote:settings';
 
@@ -11,7 +11,7 @@ export interface AppSettings {
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
-  theme: 'liquid-glass',
+  theme: 'light',
   editorMode: 'markdown',
 };
 
@@ -30,19 +30,26 @@ function saveSettings(settings: AppSettings): void {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
 }
 
-const DAISY_THEMES: AppTheme[] = ['pink', 'forest', 'luxury'];
+const DAISY_THEMES: AppTheme[] = ['light', 'dark', 'pink', 'forest', 'luxury'];
+const CUSTOM_THEMES: AppTheme[] = ['liquid-glass', 'win96', 'hacker'];
 
 export function useSettings() {
   const [settings, setSettingsState] = useState<AppSettings>(loadSettings);
 
   useEffect(() => {
     const { theme } = settings;
-    document.documentElement.removeAttribute('data-theme');
-    document.body.classList.remove('theme-liquid-glass', 'theme-win96', 'theme-hacker');
 
-    if (DAISY_THEMES.includes(theme)) {
-      document.documentElement.setAttribute('data-theme', theme);
-    } else {
+    // Always keep a base DaisyUI theme so CSS variables exist
+    const baseTheme = DAISY_THEMES.includes(theme) ? theme : 'light';
+    document.documentElement.setAttribute('data-theme', baseTheme);
+
+    // Remove old custom theme classes
+    CUSTOM_THEMES.forEach((t) => {
+      document.body.classList.remove(`theme-${t}`);
+    });
+
+    // Add custom theme class if needed
+    if (CUSTOM_THEMES.includes(theme)) {
       document.body.classList.add(`theme-${theme}`);
     }
   }, [settings.theme]);

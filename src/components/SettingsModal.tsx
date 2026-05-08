@@ -17,6 +17,8 @@ interface SettingsModalProps {
 }
 
 const THEMES: { value: AppTheme; label: string; group: string; icon: typeof Sparkles }[] = [
+  { value: 'light', label: 'Light', group: 'Default', icon: Sparkles },
+  { value: 'dark', label: 'Dark', group: 'Default', icon: Sparkles },
   { value: 'pink', label: 'Pink', group: 'DaisyUI', icon: Sparkles },
   { value: 'forest', label: 'Forest', group: 'DaisyUI', icon: Sparkles },
   { value: 'luxury', label: 'Luxury', group: 'DaisyUI', icon: Sparkles },
