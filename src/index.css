@@ -277,8 +277,9 @@ body.theme-win96 .alert {
   border: 2px inset #808080 !important;
 }
 
-body.theme-win96 .rounded-box,
-body.theme-win96 .rounded-lg,
+/* Win96 — zero out ALL rounded corners globally */
+body.theme-win96 [class*="rounded-"],
+body.theme-win96 .rounded,
 body.theme-win96 .btn-circle {
   border-radius: 0 !important;
 }
@@ -455,8 +456,10 @@ body.theme-hacker .alert-error {
   color: #ff0044 !important;
 }
 
-body.theme-hacker .rounded-box,
-body.theme-hacker .rounded-lg {
+/* Hacker — zero out ALL rounded corners globally */
+body.theme-hacker [class*="rounded-"],
+body.theme-hacker .rounded,
+body.theme-hacker .btn-circle {
   border-radius: 0 !important;
 }
 
