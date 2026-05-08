@@ -7,12 +7,12 @@ html, body, #root {
 
 body {
   margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Premium scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -26,6 +26,35 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(128, 128, 128, 0.45);
+}
+
+/* ========== BASE GLASS PANELS (all themes) ========== */
+.glass-panel {
+  background: var(--color-base-100, #ffffff);
+  border: 1px solid var(--color-base-300, #e5e7eb);
+  border-radius: 1rem;
+}
+
+.glass-panel-strong {
+  background: var(--color-base-100, #ffffff);
+  border: 1px solid var(--color-base-300, #e5e7eb);
+  border-radius: 1rem;
+}
+
+/* ========== MODAL ANIMATION ========== */
+.modal-enter {
+  animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* ========== LIQUID GLASS THEME ========== */
@@ -115,10 +144,6 @@ body.theme-liquid-glass .alert {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-body.theme-liquid-glass .modal-enter {
-  animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
 /* Liquid glass icon colors */
 body.theme-liquid-glass svg {
   color: inherit;
@@ -133,17 +158,6 @@ body.theme-liquid-glass .text-base-content\/70 svg {
   opacity: 0.75;
 }
 
-@keyframes modalIn {
-  from {
-    opacity: 0;
-    transform: scale(0.96) translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
 /* ========== WIN96 THEME ========== */
 body.theme-win96 {
   background: #008080;
@@ -152,6 +166,13 @@ body.theme-win96 {
 
 body.theme-win96 #root {
   background: #c0c0c0;
+}
+
+body.theme-win96 .glass-panel,
+body.theme-win96 .glass-panel-strong {
+  background: #c0c0c0;
+  border: 2px outset #dfdfdf;
+  border-radius: 0;
 }
 
 body.theme-win96 .bg-base-100 {
@@ -260,6 +281,14 @@ body.theme-hacker {
 
 body.theme-hacker #root {
   background: #0a0a0a;
+}
+
+body.theme-hacker .glass-panel,
+body.theme-hacker .glass-panel-strong {
+  background: rgba(0, 20, 0, 0.9);
+  border: 1px solid #00ff41;
+  border-radius: 0;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.15);
 }
 
 body.theme-hacker .bg-base-100 {
@@ -482,14 +511,14 @@ body.theme-hacker::after {
 .markdown-preview ul li { list-style-type: disc; }
 .markdown-preview ol li { list-style-type: decimal; }
 .markdown-preview code {
-  background: rgba(128, 128, 128, 0.12);
+  background: color-mix(in oklab, currentColor 8%, transparent);
   padding: 0.2rem 0.4rem;
   border-radius: 0.35rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.875em;
 }
 .markdown-preview pre {
-  background: rgba(128, 128, 128, 0.08);
+  background: color-mix(in oklab, currentColor 5%, transparent);
   padding: 1.25rem;
   border-radius: 0.75rem;
   overflow-x: auto;
@@ -502,11 +531,11 @@ body.theme-hacker::after {
   line-height: 1.6;
 }
 .markdown-preview blockquote {
-  border-left: 3px solid rgba(128, 128, 128, 0.25);
+  border-left: 3px solid color-mix(in oklab, currentColor 20%, transparent);
   padding-left: 1rem;
   margin: 0.75rem 0;
   font-style: italic;
-  color: rgba(128, 128, 128, 0.75);
+  opacity: 0.75;
 }
 .markdown-preview a {
   color: oklch(var(--p));
@@ -520,12 +549,12 @@ body.theme-hacker::after {
   font-size: 0.9em;
 }
 .markdown-preview th, .markdown-preview td {
-  border: 1px solid rgba(128, 128, 128, 0.15);
+  border: 1px solid color-mix(in oklab, currentColor 12%, transparent);
   padding: 0.6rem 0.75rem;
   text-align: left;
 }
 .markdown-preview th {
-  background: rgba(128, 128, 128, 0.06);
+  background: color-mix(in oklab, currentColor 5%, transparent);
   font-weight: 600;
   font-size: 0.85em;
   text-transform: uppercase;
@@ -533,7 +562,7 @@ body.theme-hacker::after {
 }
 .markdown-preview hr {
   border: none;
-  border-top: 1px solid rgba(128, 128, 128, 0.15);
+  border-top: 1px solid color-mix(in oklab, currentColor 12%, transparent);
   margin: 1.25rem 0;
 }
 .markdown-preview img {
