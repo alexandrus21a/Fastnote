@@ -276,11 +276,25 @@ body.theme-win96 ::-webkit-scrollbar-thumb {
 /* ========== HACKER THEME ========== */
 body.theme-hacker {
   background: #050505;
+  color: #00ff41;
   font-family: 'Courier New', 'Lucida Console', monospace;
 }
 
 body.theme-hacker #root {
   background: #0a0a0a;
+}
+
+body.theme-hacker .text-base-content {
+  color: #00ff41 !important;
+}
+
+body.theme-hacker .text-base-content\/30,
+body.theme-hacker .text-base-content\/40,
+body.theme-hacker .text-base-content\/50,
+body.theme-hacker .text-base-content\/60,
+body.theme-hacker .text-base-content\/70,
+body.theme-hacker .text-base-content\/80 {
+  color: #00ff41 !important;
 }
 
 body.theme-hacker .glass-panel,
