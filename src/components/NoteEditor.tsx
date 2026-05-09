@@ -4,7 +4,7 @@ import {
   Bold, Italic, Heading, List, ListOrdered, Link, Quote, Code,
   Eye, EyeOff, Menu, Strikethrough, CheckSquare, Image,
   SeparatorHorizontal, Download, Search, X, ChevronUp, ChevronDown,
-  PenLine, Sparkles,
+  PenLine, Sparkles, Plus,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -30,7 +30,7 @@ interface NoteEditorProps {
 
 export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggleSidebar, onCreate }: NoteEditorProps) {
   const { t } = useTranslation();
-  const [preview, setPreview] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,10 +44,10 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
 
   useEffect(() => {
-    if (note && textareaRef.current && !preview) {
+    if (note && textareaRef.current && !showPreview) {
       textareaRef.current.focus();
     }
-  }, [note?.id, preview]);
+  }, [note?.id, showPreview]);
 
   useEffect(() => {
     setSearchIndex(0);
@@ -201,24 +201,22 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
 
   if (!note) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-base-content/30 p-8">
-        <button className="btn btn-ghost btn-square mb-6 lg:hidden" onClick={onToggleSidebar}>
-          <Menu size={22} />
-        </button>
-        <div className="w-20 h-20 rounded-3xl bg-base-200 flex items-center justify-center mb-5">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-base-content/20">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-            <line x1="16" y1="13" x2="8" y2="13" />
-            <line x1="16" y1="17" x2="8" y2="17" />
-            <line x1="10" y1="9" x2="8" y2="9" />
-          </svg>
-        </div>
+      <div className="flex-1 flex flex-col items-center justify-center text-base-content/25 p-8">
         <button
-          className="btn btn-primary gap-2 shadow-md"
+          className="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-base-200 transition-colors text-base-content/40 mb-8"
+          onClick={onToggleSidebar}
+        >
+          <Menu size={18} />
+        </button>
+        <div className="w-12 h-12 rounded-xl bg-base-200/50 flex items-center justify-center mb-4">
+          <PenLine size={20} className="text-base-content/15" />
+        </div>
+        <p className="text-sm font-medium text-base-content/40 mb-1">{t('selectOrCreate')}</p>
+        <button
+          className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-content text-sm font-medium hover:opacity-90 transition-opacity"
           onClick={onCreate}
         >
-          <PenLine size={16} />
+          <Plus size={15} />
           {t('writeNewNote')}
         </button>
       </div>
@@ -227,238 +225,240 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
 
   const isSimple = editorMode === 'simple';
 
-  // Highlight logic is handled via textarea selectionRange
-
   return (
-    <div className="flex-1 flex flex-col min-w-0 p-3">
-      <div className="glass-panel-strong rounded-2xl flex flex-col h-full overflow-hidden">
-        {/* Title bar */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-black/5">
-          <button className="btn btn-ghost btn-sm btn-square lg:hidden min-h-8 h-8 w-8" onClick={onToggleSidebar}>
-            <Menu size={16} />
-          </button>
-          <input
-            type="text"
-            className="flex-1 bg-transparent font-semibold text-lg outline-none placeholder:text-base-content/20"
-            placeholder={t('noteTitle')}
-            value={note.title}
-            onChange={(e) => onUpdate(note.id, { title: e.target.value })}
-          />
-          <div className="flex items-center gap-1">
-            {!isSimple && (
+    <div className="flex-1 flex flex-col min-w-0 bg-base-100">
+      {/* Title bar */}
+      <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+        <button
+          className="lg:hidden inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
+          onClick={onToggleSidebar}
+        >
+          <Menu size={16} />
+        </button>
+        <input
+          type="text"
+          className="flex-1 bg-transparent text-xl font-semibold tracking-tight outline-none placeholder:text-base-content/20 text-base-content/90 py-1"
+          placeholder={t('noteTitle')}
+          value={note.title}
+          onChange={(e) => onUpdate(note.id, { title: e.target.value })}
+        />
+        <div className="flex items-center gap-0.5">
+          {!isSimple && (
+            <>
               <button
-                className={`btn btn-ghost btn-xs btn-square min-h-8 h-8 w-8 hidden sm:flex ${searchOpen ? 'bg-base-200' : ''}`}
+                className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
                 onClick={() => { setSearchOpen((s) => !s); setTimeout(() => searchInputRef.current?.focus(), 50); }}
                 title="Search in note"
               >
-                <Search size={14} />
+                <Search size={15} />
               </button>
-            )}
-            {!isSimple && (
               <button
-                className={`btn btn-ghost btn-xs btn-square min-h-8 h-8 w-8 hidden sm:flex ${preview ? 'bg-base-200' : ''}`}
-                onClick={() => setPreview((p) => !p)}
-                title={preview ? t('edit') : t('preview')}
+                className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
+                onClick={() => setShowPreview((p) => !p)}
+                title={showPreview ? t('edit') : t('preview')}
               >
-                {preview ? <EyeOff size={14} /> : <Eye size={14} />}
+                {showPreview ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
-            )}
-            <div className="dropdown dropdown-end hidden sm:block">
-              <button className="btn btn-ghost btn-xs btn-square min-h-8 h-8 w-8" onClick={() => setExportOpen((v) => !v)}>
-                <Download size={14} />
-              </button>
-              {exportOpen && (
-                <ul className="dropdown-content menu p-2 shadow-xl bg-base-100 rounded-xl w-44 z-50 border border-black/5">
-                  <li><button className="text-sm" onClick={() => { handleExportTXT(); setExportOpen(false); }}>{t('exportTXT')}</button></li>
-                  <li><button className="text-sm" onClick={() => { handleExportMD(); setExportOpen(false); }}>{t('exportMD')}</button></li>
-                  <li><button className="text-sm" onClick={() => { handleExportDOCX(); setExportOpen(false); }}>{t('exportDOCX')}</button></li>
-                  {!isSimple && <li><button className="text-sm" onClick={() => { handleExportPDF(); setExportOpen(false); }}>{t('exportPDF')}</button></li>}
-                  <li className="divider m-0" />
-                  <li><button className="text-sm" onClick={() => { handlePrint(); setExportOpen(false); }}>{t('print')}</button></li>
-                </ul>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Search bar */}
-        {searchOpen && !isSimple && (
-          <div className="px-5 py-2 border-b border-black/5 flex items-center gap-2">
-            <Search size={14} className="text-base-content/40" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              className="input input-sm input-ghost flex-1 h-8 px-0 text-sm"
-              placeholder="Find in note..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') goToMatch('next');
-                if (e.key === 'Escape') { setSearchOpen(false); setSearchQuery(''); }
-              }}
-            />
-            {matches.length > 0 && (
-              <span className="text-xs text-base-content/50 whitespace-nowrap">
-                {searchIndex + 1} / {matches.length}
-              </span>
-            )}
-            <button className="btn btn-ghost btn-xs btn-square min-h-7 h-7 w-7" onClick={() => goToMatch('prev')} disabled={matches.length === 0}>
-              <ChevronUp size={14} />
+            </>
+          )}
+          <div className="relative">
+            <button
+              className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
+              onClick={() => setExportOpen((v) => !v)}
+            >
+              <Download size={15} />
             </button>
-            <button className="btn btn-ghost btn-xs btn-square min-h-7 h-7 w-7" onClick={() => goToMatch('next')} disabled={matches.length === 0}>
-              <ChevronDown size={14} />
-            </button>
-            <button className="btn btn-ghost btn-xs btn-square min-h-7 h-7 w-7" onClick={() => { setSearchOpen(false); setSearchQuery(''); }}>
-              <X size={14} />
-            </button>
-          </div>
-        )}
-
-        {/* Markdown toolbar */}
-        {!isSimple && (
-          <div className="px-5 py-2 border-b border-black/5 flex items-center gap-0.5 overflow-x-auto">
-            {toolbarActions.map((t) => (
-              <button
-                key={t.title}
-                className="btn btn-ghost btn-xs btn-square min-h-7 h-7 w-7 flex-shrink-0"
-                onClick={t.action}
-                title={t.title}
-              >
-                <t.icon size={13} />
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Editor / Preview */}
-        <div className="flex-1 flex min-h-0 relative">
-          <div className={`flex-1 flex flex-col min-w-0 relative ${(!isSimple && preview && !isMobile) ? 'border-r border-black/5' : ''} ${(!isSimple && preview && isMobile) ? 'hidden' : 'flex'}`}>
-            <textarea
-              ref={textareaRef}
-              className="flex-1 w-full resize-none outline-none bg-transparent p-5 text-[15px] leading-relaxed"
-              placeholder={isSimple ? (t('startWritingSimple') || 'Start writing...') : t('startWriting')}
-              value={note.content}
-              onChange={(e) => onUpdate(note.id, { content: e.target.value })}
-              onInput={() => {
-                if (!magicFeatures || !note || !textareaRef.current) {
-                  setMagicPreview(null);
-                  setMagicBadgePos(null);
-                  return;
-                }
-                const el = textareaRef.current;
-                const cursorPos = el.selectionStart;
-                const value = el.value;
-                const lineStart = value.lastIndexOf('\n', cursorPos - 1) + 1;
-                const lineEnd = value.indexOf('\n', cursorPos);
-                const line = value.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
-
-                if (!line.trimEnd().endsWith('=')) {
-                  setMagicPreview(null);
-                  setMagicBadgePos(null);
-                  return;
-                }
-
-                let result = autoCalculateLine(line, value);
-                if (!result) result = autoCalculateUnitLine(line);
-                if (!result) result = autoCalculateCurrencyLineSync(line);
-
-                if (result) {
-                  const computed = result.slice(line.trimEnd().length).trim();
-                  setMagicPreview(computed);
-                  const pos = getCaretPos(el, cursorPos);
-                  setMagicBadgePos(pos);
-                } else {
-                  setMagicPreview(null);
-                  setMagicBadgePos(null);
-                }
-              }}
-              onKeyDown={(e) => {
-                if (!magicFeatures || !note) return;
-                const el = e.currentTarget;
-                const cursorPos = el.selectionStart;
-                const value = el.value;
-                const lineStart = value.lastIndexOf('\n', cursorPos - 1) + 1;
-                const lineEnd = value.indexOf('\n', cursorPos);
-                const line = value.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
-
-                // Accept with Space or Tab when preview is active
-                if ((e.key === ' ' || e.key === 'Tab') && magicPreview) {
-                  e.preventDefault();
-                  const before = value.slice(0, cursorPos);
-                  const after = value.slice(cursorPos);
-                  const spacer = e.key === 'Tab' ? '\t' : ' ';
-                  const newValue = before + magicPreview + spacer + after;
-                  onUpdate(note.id, { content: newValue });
-                  setMagicPreview(null);
-                  setMagicBadgePos(null);
-                  requestAnimationFrame(() => {
-                    const newPos = cursorPos + magicPreview.length + 1;
-                    el.setSelectionRange(newPos, newPos);
-                    el.focus();
-                  });
-                  return;
-                }
-
-                if (e.key !== '=') return;
-
-                let result = autoCalculateLine(line, value);
-                if (!result) result = autoCalculateUnitLine(line);
-                if (!result) result = autoCalculateCurrencyLineSync(line);
-
-                if (result) {
-                  e.preventDefault();
-                  const before = value.slice(0, lineStart);
-                  const after = lineEnd === -1 ? '' : value.slice(lineEnd);
-                  const newValue = before + result + after;
-                  onUpdate(note.id, { content: newValue });
-                  setMagicPreview(null);
-                  setMagicBadgePos(null);
-                  requestAnimationFrame(() => {
-                    const newPos = lineStart + result!.length;
-                    el.setSelectionRange(newPos, newPos);
-                    el.focus();
-                  });
-                }
-              }}
-            />
-
-            {/* Magic preview badge — positioned next to cursor */}
-            {magicPreview && magicBadgePos && (
-              <div
-                className="absolute z-10 pointer-events-none"
-                style={{
-                  top: magicBadgePos.top + 4,
-                  left: magicBadgePos.left + 8,
-                }}
-              >
-                <div className="glass-panel-strong px-2.5 py-1 rounded-lg text-sm font-medium text-primary shadow-md border border-primary/20 animate-in fade-in zoom-in-95 duration-150 flex items-center gap-1.5">
-                  <Sparkles size={12} />
-                  {magicPreview}
-                </div>
+            {exportOpen && (
+              <div className="absolute right-0 top-full mt-1 py-1 bg-base-100 border border-base-300/40 rounded-xl shadow-xl w-44 z-50">
+                <button className="w-full text-left px-3 py-2 text-[13px] hover:bg-base-200/60 transition-colors" onClick={() => { handleExportTXT(); setExportOpen(false); }}>{t('exportTXT')}</button>
+                <button className="w-full text-left px-3 py-2 text-[13px] hover:bg-base-200/60 transition-colors" onClick={() => { handleExportMD(); setExportOpen(false); }}>{t('exportMD')}</button>
+                <button className="w-full text-left px-3 py-2 text-[13px] hover:bg-base-200/60 transition-colors" onClick={() => { handleExportDOCX(); setExportOpen(false); }}>{t('exportDOCX')}</button>
+                {!isSimple && <button className="w-full text-left px-3 py-2 text-[13px] hover:bg-base-200/60 transition-colors" onClick={() => { handleExportPDF(); setExportOpen(false); }}>{t('exportPDF')}</button>}
+                <div className="h-px bg-base-300/30 mx-2 my-1" />
+                <button className="w-full text-left px-3 py-2 text-[13px] hover:bg-base-200/60 transition-colors" onClick={() => { handlePrint(); setExportOpen(false); }}>{t('print')}</button>
               </div>
             )}
           </div>
-          {!isSimple && preview && (
-            <div className="flex-1 min-w-0 overflow-y-auto p-5">
-              <div ref={previewRef} className="markdown-preview prose max-w-none">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {note.content || t('nothingToPreview')}
-                </ReactMarkdown>
+        </div>
+      </div>
+
+      {/* Search bar */}
+      {searchOpen && !isSimple && (
+        <div className="px-5 py-2 border-b border-base-300/20 flex items-center gap-2">
+          <Search size={14} className="text-base-content/30" />
+          <input
+            ref={searchInputRef}
+            type="text"
+            className="flex-1 bg-transparent text-sm outline-none placeholder:text-base-content/25 h-7"
+            placeholder="Find in note..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') goToMatch('next');
+              if (e.key === 'Escape') { setSearchOpen(false); setSearchQuery(''); }
+            }}
+          />
+          {matches.length > 0 && (
+            <span className="text-xs text-base-content/40 whitespace-nowrap font-mono">
+              {searchIndex + 1} / {matches.length}
+            </span>
+          )}
+          <button className="inline-flex items-center justify-center w-6 h-6 rounded hover:bg-base-200 text-base-content/40" onClick={() => goToMatch('prev')} disabled={matches.length === 0}>
+            <ChevronUp size={14} />
+          </button>
+          <button className="inline-flex items-center justify-center w-6 h-6 rounded hover:bg-base-200 text-base-content/40" onClick={() => goToMatch('next')} disabled={matches.length === 0}>
+            <ChevronDown size={14} />
+          </button>
+          <button className="inline-flex items-center justify-center w-6 h-6 rounded hover:bg-base-200 text-base-content/40" onClick={() => { setSearchOpen(false); setSearchQuery(''); }}>
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
+      {/* Markdown toolbar */}
+      {!isSimple && (
+        <div className="px-5 py-1.5 border-b border-base-300/20 flex items-center gap-0.5 overflow-x-auto">
+          {toolbarActions.map((t) => (
+            <button
+              key={t.title}
+              className="inline-flex items-center justify-center w-7 h-7 rounded-md hover:bg-base-200/70 transition-colors text-base-content/40 flex-shrink-0"
+              onClick={t.action}
+              title={t.title}
+            >
+              <t.icon size={13} strokeWidth={2} />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Editor / Preview */}
+      <div className="flex-1 flex min-h-0 relative">
+        <div className={`flex-1 flex flex-col min-w-0 relative ${(!isSimple && showPreview && !isMobile) ? 'border-r border-base-300/20' : ''} ${(!isSimple && showPreview && isMobile) ? 'hidden' : 'flex'}`}>
+          <textarea
+            ref={textareaRef}
+            className="flex-1 w-full resize-none outline-none bg-transparent p-5 text-[15px] leading-[1.75] text-base-content/80"
+            placeholder={isSimple ? (t('startWritingSimple') || 'Start writing...') : t('startWriting')}
+            value={note.content}
+            onChange={(e) => onUpdate(note.id, { content: e.target.value })}
+            onInput={() => {
+              if (!magicFeatures || !note || !textareaRef.current) {
+                setMagicPreview(null);
+                setMagicBadgePos(null);
+                return;
+              }
+              const el = textareaRef.current;
+              const cursorPos = el.selectionStart;
+              const value = el.value;
+              const lineStart = value.lastIndexOf('\n', cursorPos - 1) + 1;
+              const lineEnd = value.indexOf('\n', cursorPos);
+              const line = value.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
+
+              if (!line.trimEnd().endsWith('=')) {
+                setMagicPreview(null);
+                setMagicBadgePos(null);
+                return;
+              }
+
+              let result = autoCalculateLine(line, value);
+              if (!result) result = autoCalculateUnitLine(line);
+              if (!result) result = autoCalculateCurrencyLineSync(line);
+
+              if (result) {
+                const computed = result.slice(line.trimEnd().length).trim();
+                setMagicPreview(computed);
+                const pos = getCaretPos(el, cursorPos);
+                setMagicBadgePos(pos);
+              } else {
+                setMagicPreview(null);
+                setMagicBadgePos(null);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (!magicFeatures || !note) return;
+              const el = e.currentTarget;
+              const cursorPos = el.selectionStart;
+              const value = el.value;
+              const lineStart = value.lastIndexOf('\n', cursorPos - 1) + 1;
+              const lineEnd = value.indexOf('\n', cursorPos);
+              const line = value.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
+
+              if ((e.key === ' ' || e.key === 'Tab') && magicPreview) {
+                e.preventDefault();
+                const before = value.slice(0, cursorPos);
+                const after = value.slice(cursorPos);
+                const spacer = e.key === 'Tab' ? '\t' : ' ';
+                const newValue = before + magicPreview + spacer + after;
+                onUpdate(note.id, { content: newValue });
+                setMagicPreview(null);
+                setMagicBadgePos(null);
+                requestAnimationFrame(() => {
+                  const newPos = cursorPos + magicPreview.length + 1;
+                  el.setSelectionRange(newPos, newPos);
+                  el.focus();
+                });
+                return;
+              }
+
+              if (e.key !== '=') return;
+
+              let result = autoCalculateLine(line, value);
+              if (!result) result = autoCalculateUnitLine(line);
+              if (!result) result = autoCalculateCurrencyLineSync(line);
+
+              if (result) {
+                e.preventDefault();
+                const before = value.slice(0, lineStart);
+                const after = lineEnd === -1 ? '' : value.slice(lineEnd);
+                const newValue = before + result + after;
+                onUpdate(note.id, { content: newValue });
+                setMagicPreview(null);
+                setMagicBadgePos(null);
+                requestAnimationFrame(() => {
+                  const newPos = lineStart + result!.length;
+                  el.setSelectionRange(newPos, newPos);
+                  el.focus();
+                });
+              }
+            }}
+          />
+
+          {/* Magic preview badge */}
+          {magicPreview && magicBadgePos && (
+            <div
+              className="absolute z-10 pointer-events-none"
+              style={{
+                top: magicBadgePos.top + 4,
+                left: magicBadgePos.left + 8,
+              }}
+            >
+              <div className="bg-base-100/95 backdrop-blur-sm px-2.5 py-1 rounded-lg text-sm font-medium text-primary shadow-lg border border-primary/20 flex items-center gap-1.5">
+                <Sparkles size={12} />
+                {magicPreview}
               </div>
             </div>
           )}
         </div>
 
-        {/* Mobile preview toggle */}
-        {!isSimple && isMobile && (
-          <div className="border-t border-black/5 p-2 flex justify-center sm:hidden">
-            <button className="btn btn-ghost btn-sm gap-2" onClick={() => setPreview((p) => !p)}>
-              {preview ? <EyeOff size={16} /> : <Eye size={16} />}
-              {preview ? t('edit') : t('preview')}
-            </button>
+        {!isSimple && showPreview && (
+          <div className="flex-1 min-w-0 overflow-y-auto p-5">
+            <div ref={previewRef} className="markdown-preview prose max-w-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {note.content || t('nothingToPreview')}
+              </ReactMarkdown>
+            </div>
           </div>
         )}
       </div>
+
+      {/* Mobile preview toggle */}
+      {!isSimple && isMobile && (
+        <div className="border-t border-base-300/20 p-2 flex justify-center sm:hidden">
+          <button className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-base-200 text-sm text-base-content/60 transition-colors" onClick={() => setShowPreview((p) => !p)}>
+            {showPreview ? <EyeOff size={14} /> : <Eye size={14} />}
+            {showPreview ? t('edit') : t('preview')}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

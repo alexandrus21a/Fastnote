@@ -16,68 +16,83 @@ export function NoteItem({ note, active, onSelect, onDelete, onTogglePin }: Note
     month: 'short',
     day: 'numeric',
   });
-  const time = new Date(note.updatedAt).toLocaleTimeString(undefined, {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
 
   return (
     <div
-      className={`group flex flex-col gap-1 p-3 cursor-pointer rounded-xl transition-all duration-200 ${
-        active
-          ? 'bg-primary text-primary-content shadow-md border border-primary'
-          : 'bg-base-100/60 border border-base-300/40 hover:bg-base-200 hover:border-base-300/70 hover:shadow-sm'
+      className={`group relative cursor-pointer transition-colors duration-150 ${
+        active ? 'bg-base-200/60' : 'hover:bg-base-200/40'
       }`}
       onClick={() => onSelect(note.id)}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-1.5 min-w-0">
-          {note.pinned && (
-            <span className={`shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-md ${active ? 'bg-primary-content/20' : 'bg-primary/10'}`}>
-              <Pin size={11} className={`${active ? 'text-primary-content' : 'text-primary'}`} fill={active ? 'currentColor' : 'none'} />
+      {/* Active indicator line */}
+      {active && (
+        <div className="absolute left-0 top-2 bottom-2 w-0.5 bg-primary rounded-full" />
+      )}
+
+      <div className="px-4 py-2.5">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            {note.pinned && (
+              <Pin
+                size={10}
+                className={`shrink-0 mt-1 ${active ? 'text-primary' : 'text-base-content/30'}`}
+                fill="currentColor"
+              />
+            )}
+            <span
+              className={`text-sm truncate font-medium ${
+                active ? 'text-base-content' : 'text-base-content/80'
+              }`}
+            >
+              {note.title || t('untitledNote')}
             </span>
-          )}
-          <span className={`font-semibold text-sm truncate ${active ? 'text-primary-content' : 'text-base-content/90'}`}>
-            {note.title || t('untitledNote')}
-          </span>
+          </div>
+          <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button
+              className={`inline-flex items-center justify-center w-6 h-6 rounded-md transition-colors ${
+                active
+                  ? 'hover:bg-base-300/60 text-base-content/50'
+                  : 'hover:bg-base-300/50 text-base-content/30'
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onTogglePin(note.id);
+              }}
+              title={note.pinned ? t('unpin') : t('pin')}
+            >
+              <Pin size={11} fill={note.pinned ? 'currentColor' : 'none'} />
+            </button>
+            <button
+              className={`inline-flex items-center justify-center w-6 h-6 rounded-md transition-colors ${
+                active
+                  ? 'hover:bg-error/10 text-base-content/50 hover:text-error'
+                  : 'hover:bg-error/10 text-base-content/30 hover:text-error'
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(note.id);
+              }}
+              title={t('delete')}
+            >
+              <Trash2 size={11} />
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-0.5 shrink-0">
-          <button
-            className={`btn btn-xs btn-square min-h-6 h-6 w-6 border-0 ${
-              note.pinned
-                ? (active ? 'bg-primary-content/20 text-primary-content' : 'bg-primary/10 text-primary')
-                : (active ? 'btn-ghost hover:bg-primary-content/20 text-primary-content/70' : 'btn-ghost hover:bg-base-300/50 text-base-content/40')
-            }`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onTogglePin(note.id);
-            }}
-            title={note.pinned ? t('unpin') : t('pin')}
-          >
-            <Pin size={12} fill={note.pinned ? 'currentColor' : 'none'} />
-          </button>
-          <button
-            className={`btn btn-xs btn-square min-h-6 h-6 w-6 border-0 ${
-              active
-                ? 'btn-ghost hover:bg-error/30 text-primary-content/70 hover:text-error-content'
-                : 'btn-ghost hover:bg-error/10 text-base-content/40 hover:text-error'
-            }`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(note.id);
-            }}
-            title={t('delete')}
-          >
-            <Trash2 size={12} />
-          </button>
-        </div>
+        <p
+          className={`text-[13px] truncate leading-relaxed mt-0.5 ${
+            active ? 'text-base-content/50' : 'text-base-content/35'
+          }`}
+        >
+          {note.content.slice(0, 90).replace(/\n/g, ' ') || t('noContent')}
+        </p>
+        <span
+          className={`text-[11px] font-mono mt-1 block ${
+            active ? 'text-base-content/30' : 'text-base-content/25'
+          }`}
+        >
+          {date}
+        </span>
       </div>
-      <p className={`text-xs truncate leading-relaxed ${active ? 'text-primary-content/70' : 'text-base-content/40'}`}>
-        {note.content.slice(0, 80).replace(/\n/g, ' ') || t('noContent')}
-      </p>
-      <span className={`text-[10px] font-medium tracking-wide uppercase ${active ? 'text-primary-content/50' : 'text-base-content/30'}`}>
-        {date} · {time}
-      </span>
     </div>
   );
 }
