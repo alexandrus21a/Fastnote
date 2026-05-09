@@ -4,7 +4,7 @@ import {
   Bold, Italic, Heading, List, ListOrdered, Link, Quote, Code,
   Eye, EyeOff, Menu, Strikethrough, CheckSquare, Image,
   SeparatorHorizontal, Download, Search, X, ChevronUp, ChevronDown,
-  PenLine,
+  PenLine, Sparkles,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -17,6 +17,7 @@ import type { EditorMode } from '../hooks/useSettings';
 import { autoCalculateLine } from '../utils/math';
 import { autoCalculateCurrencyLineSync } from '../utils/currency';
 import { autoCalculateUnitLine } from '../utils/units';
+import { useCaretPosition } from '../hooks/useCaretPosition';
 
 interface NoteEditorProps {
   note: Note | null;
@@ -35,9 +36,11 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
   const [searchQuery, setSearchQuery] = useState('');
   const [searchIndex, setSearchIndex] = useState(0);
   const [magicPreview, setMagicPreview] = useState<string | null>(null);
+  const [magicBadgePos, setMagicBadgePos] = useState<{ top: number; left: number } | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const getCaretPos = useCaretPosition();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
 
   useEffect(() => {
@@ -328,8 +331,8 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
         )}
 
         {/* Editor / Preview */}
-        <div className="flex-1 flex min-h-0">
-          <div className={`flex-1 flex flex-col min-w-0 ${(!isSimple && preview && !isMobile) ? 'border-r border-black/5' : ''} ${(!isSimple && preview && isMobile) ? 'hidden' : 'flex'}`}>
+        <div className="flex-1 flex min-h-0 relative">
+          <div className={`flex-1 flex flex-col min-w-0 relative ${(!isSimple && preview && !isMobile) ? 'border-r border-black/5' : ''} ${(!isSimple && preview && isMobile) ? 'hidden' : 'flex'}`}>
             <textarea
               ref={textareaRef}
               className="flex-1 w-full resize-none outline-none bg-transparent p-5 text-[15px] leading-relaxed"
@@ -339,6 +342,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
               onInput={() => {
                 if (!magicFeatures || !note || !textareaRef.current) {
                   setMagicPreview(null);
+                  setMagicBadgePos(null);
                   return;
                 }
                 const el = textareaRef.current;
@@ -350,6 +354,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
 
                 if (!line.trimEnd().endsWith('=')) {
                   setMagicPreview(null);
+                  setMagicBadgePos(null);
                   return;
                 }
 
@@ -358,21 +363,43 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
                 if (!result) result = autoCalculateCurrencyLineSync(line);
 
                 if (result) {
-                  // Extract just the computed part (after the =)
                   const computed = result.slice(line.trimEnd().length).trim();
                   setMagicPreview(computed);
+                  const pos = getCaretPos(el, cursorPos);
+                  setMagicBadgePos(pos);
                 } else {
                   setMagicPreview(null);
+                  setMagicBadgePos(null);
                 }
               }}
               onKeyDown={(e) => {
-                if (!magicFeatures || !note || e.key !== '=') return;
+                if (!magicFeatures || !note) return;
                 const el = e.currentTarget;
                 const cursorPos = el.selectionStart;
                 const value = el.value;
                 const lineStart = value.lastIndexOf('\n', cursorPos - 1) + 1;
                 const lineEnd = value.indexOf('\n', cursorPos);
                 const line = value.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
+
+                // Accept with Space or Tab when preview is active
+                if ((e.key === ' ' || e.key === 'Tab') && magicPreview) {
+                  e.preventDefault();
+                  const before = value.slice(0, cursorPos);
+                  const after = value.slice(cursorPos);
+                  const spacer = e.key === 'Tab' ? '\t' : ' ';
+                  const newValue = before + magicPreview + spacer + after;
+                  onUpdate(note.id, { content: newValue });
+                  setMagicPreview(null);
+                  setMagicBadgePos(null);
+                  requestAnimationFrame(() => {
+                    const newPos = cursorPos + magicPreview.length + 1;
+                    el.setSelectionRange(newPos, newPos);
+                    el.focus();
+                  });
+                  return;
+                }
+
+                if (e.key !== '=') return;
 
                 let result = autoCalculateLine(line, value);
                 if (!result) result = autoCalculateUnitLine(line);
@@ -385,6 +412,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
                   const newValue = before + result + after;
                   onUpdate(note.id, { content: newValue });
                   setMagicPreview(null);
+                  setMagicBadgePos(null);
                   requestAnimationFrame(() => {
                     const newPos = lineStart + result!.length;
                     el.setSelectionRange(newPos, newPos);
@@ -393,6 +421,22 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
                 }
               }}
             />
+
+            {/* Magic preview badge — positioned next to cursor */}
+            {magicPreview && magicBadgePos && (
+              <div
+                className="absolute z-10 pointer-events-none"
+                style={{
+                  top: magicBadgePos.top + 4,
+                  left: magicBadgePos.left + 8,
+                }}
+              >
+                <div className="glass-panel-strong px-2.5 py-1 rounded-lg text-sm font-medium text-primary shadow-md border border-primary/20 animate-in fade-in zoom-in-95 duration-150 flex items-center gap-1.5">
+                  <Sparkles size={12} />
+                  {magicPreview}
+                </div>
+              </div>
+            )}
           </div>
           {!isSimple && preview && (
             <div className="flex-1 min-w-0 overflow-y-auto p-5">
@@ -400,16 +444,6 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {note.content || t('nothingToPreview')}
                 </ReactMarkdown>
-              </div>
-            </div>
-          )}
-
-          {/* Magic preview badge */}
-          {magicPreview && (
-            <div className="absolute bottom-3 right-5 z-10">
-              <div className="glass-panel-strong px-3 py-1.5 rounded-xl text-sm font-medium text-primary shadow-md border border-primary/20 animate-in fade-in slide-in-from-bottom-2 duration-200">
-                <span className="opacity-50 mr-1">=</span>
-                {magicPreview}
               </div>
             </div>
           )}

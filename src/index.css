@@ -105,6 +105,20 @@ body {
   }
 }
 
+/* ========== DRAWER ANIMATION ========== */
+.drawer-enter {
+  animation: drawerIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes drawerIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 /* ========== LIQUID GLASS THEME ========== */
 body.theme-liquid-glass {
   background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 40%, #e2e8f0 100%);
