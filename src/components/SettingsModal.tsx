@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Download, Upload, Lock, FileJson, Palette, Type, Settings, Sparkles, Monitor, Terminal } from 'lucide-react';
 import type { Note } from '../types/note';
-import type { AppTheme, EditorMode, MagicMathMode, MagicCurrencyMode, MagicUnitsMode } from '../hooks/useSettings';
+import type { AppTheme, EditorMode } from '../hooks/useSettings';
 import { encryptData, decryptData, type EncryptedBundle } from '../utils/crypto';
 
 interface SettingsModalProps {
@@ -10,14 +10,10 @@ interface SettingsModalProps {
   notes: Note[];
   theme: AppTheme;
   editorMode: EditorMode;
-  magicMath: MagicMathMode;
-  magicCurrency: MagicCurrencyMode;
-  magicUnits: MagicUnitsMode;
+  magicFeatures: boolean;
   onThemeChange: (theme: AppTheme) => void;
   onEditorModeChange: (mode: EditorMode) => void;
-  onMagicMathChange: (mode: MagicMathMode) => void;
-  onMagicCurrencyChange: (mode: MagicCurrencyMode) => void;
-  onMagicUnitsChange: (mode: MagicUnitsMode) => void;
+  onMagicFeaturesChange: (enabled: boolean) => void;
   onImport: (notes: Note[]) => void;
   onClose: () => void;
 }
@@ -38,14 +34,10 @@ export function SettingsModal({
   notes,
   theme,
   editorMode,
-  magicMath,
-  magicCurrency,
-  magicUnits,
+  magicFeatures,
   onThemeChange,
   onEditorModeChange,
-  onMagicMathChange,
-  onMagicCurrencyChange,
-  onMagicUnitsChange,
+  onMagicFeaturesChange,
   onImport,
   onClose,
 }: SettingsModalProps) {
@@ -209,70 +201,24 @@ export function SettingsModal({
 
               <div className="space-y-3">
                 <label className="text-xs font-bold tracking-widest uppercase text-base-content/40">
-                  {t('magicMath') || 'Magic Math'}
+                  {t('magicFeatures') || 'Magic Features'}
                 </label>
                 <div className="flex flex-col sm:flex-row gap-2">
                   <button
-                    className={`btn btn-sm flex-1 rounded-xl ${magicMath === 'on' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
-                    onClick={() => onMagicMathChange('on')}
+                    className={`btn btn-sm flex-1 rounded-xl ${magicFeatures ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
+                    onClick={() => onMagicFeaturesChange(true)}
                   >
                     {t('on') || 'On'}
                   </button>
                   <button
-                    className={`btn btn-sm flex-1 rounded-xl ${magicMath === 'off' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
-                    onClick={() => onMagicMathChange('off')}
+                    className={`btn btn-sm flex-1 rounded-xl ${!magicFeatures ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
+                    onClick={() => onMagicFeaturesChange(false)}
                   >
                     {t('off') || 'Off'}
                   </button>
                 </div>
                 <p className="text-xs text-base-content/40 leading-relaxed">
-                  {t('magicMathDesc') || 'Type "1+1=" and the result "2" appears automatically.'}
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <label className="text-xs font-bold tracking-widest uppercase text-base-content/40">
-                  {t('magicCurrency') || 'Magic Currency'}
-                </label>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <button
-                    className={`btn btn-sm flex-1 rounded-xl ${magicCurrency === 'on' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
-                    onClick={() => onMagicCurrencyChange('on')}
-                  >
-                    {t('on') || 'On'}
-                  </button>
-                  <button
-                    className={`btn btn-sm flex-1 rounded-xl ${magicCurrency === 'off' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
-                    onClick={() => onMagicCurrencyChange('off')}
-                  >
-                    {t('off') || 'Off'}
-                  </button>
-                </div>
-                <p className="text-xs text-base-content/40 leading-relaxed">
-                  {t('magicCurrencyDesc') || 'Type "100$+2€=" and the total appears automatically.'}
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <label className="text-xs font-bold tracking-widest uppercase text-base-content/40">
-                  {t('magicUnits') || 'Magic Units'}
-                </label>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <button
-                    className={`btn btn-sm flex-1 rounded-xl ${magicUnits === 'on' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
-                    onClick={() => onMagicUnitsChange('on')}
-                  >
-                    {t('on') || 'On'}
-                  </button>
-                  <button
-                    className={`btn btn-sm flex-1 rounded-xl ${magicUnits === 'off' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
-                    onClick={() => onMagicUnitsChange('off')}
-                  >
-                    {t('off') || 'Off'}
-                  </button>
-                </div>
-                <p className="text-xs text-base-content/40 leading-relaxed">
-                  {t('magicUnitsDesc') || 'Type "15km+3mi=" or "100lb to kg=" and the result appears.'}
+                  {t('magicFeaturesDesc') || 'Auto-calculate math, currencies and units when typing "=". Examples: 1+1=, 100$+2€=, 15km+3mi='}
                 </p>
               </div>
             </div>

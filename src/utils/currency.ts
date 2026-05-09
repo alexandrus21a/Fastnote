@@ -54,6 +54,10 @@ function saveCache(cache: RatesCache) {
   localStorage.setItem(RATES_KEY, JSON.stringify(cache));
 }
 
+export function getRatesSync(): RatesCache | null {
+  return loadCache();
+}
+
 export async function fetchRates(): Promise<RatesCache | null> {
   const cached = loadCache();
   if (cached) return cached;
@@ -156,23 +160,16 @@ export function parseMixedCurrencyExpression(expr: string): {
   return { amounts, ops };
 }
 
-/**
- * Evaluate a currency expression.
- * Returns a formatted string like "= 108.50$" or null if invalid.
- */
-export async function evaluateCurrencyExpression(expr: string): Promise<string | null> {
+function evaluateCurrencyExpressionSync(expr: string, rates: Record<string, number>): string | null {
   const trimmed = expr.trim();
   if (!trimmed) return null;
 
-  // Direct conversion: "100 USD to EUR" or "100$ to €"
   const directConv = trimmed.match(/^(.+?)\s+(?:to|в)\s+(.+)$/i);
   if (directConv) {
     const fromAmt = parseCurrencyAmount(directConv[1]);
     const toCode = parseCurrencyAmount(directConv[2])?.code || directConv[2].trim().toUpperCase();
     if (fromAmt && toCode) {
-      const cache = await fetchRates();
-      if (!cache) return null;
-      const result = convert(fromAmt.amount, fromAmt.code, toCode, cache.rates);
+      const result = convert(fromAmt.amount, fromAmt.code, toCode, rates);
       if (result === null) return null;
       const symbol = CURRENCY_SYMBOLS[toCode] || toCode;
       const formatted = Number.isInteger(result) ? String(result) : result.toFixed(2);
@@ -180,20 +177,14 @@ export async function evaluateCurrencyExpression(expr: string): Promise<string |
     }
   }
 
-  // Mixed expression: "100$+2€" or "50 GBP - 20 EUR"
   const mixed = parseMixedCurrencyExpression(trimmed);
   if (mixed && mixed.amounts.length > 0) {
-    const cache = await fetchRates();
-    if (!cache) return null;
-
-    // Convert everything to the first currency's code
     const targetCode = mixed.amounts[0].code;
     const targetSymbol = mixed.amounts[0].symbol;
-
     let total = mixed.amounts[0].amount;
 
     for (let i = 1; i < mixed.amounts.length; i++) {
-      const converted = convert(mixed.amounts[i].amount, mixed.amounts[i].code, targetCode, cache.rates);
+      const converted = convert(mixed.amounts[i].amount, mixed.amounts[i].code, targetCode, rates);
       if (converted === null) return null;
       const op = mixed.ops[i - 1];
       if (op === '+') total += converted;
@@ -208,20 +199,26 @@ export async function evaluateCurrencyExpression(expr: string): Promise<string |
   return null;
 }
 
-/**
- * Given a line ending with '=', try to evaluate it as currency.
- * Returns the full line with result appended, or null.
- */
-export async function autoCalculateCurrencyLine(line: string): Promise<string | null> {
+export function autoCalculateCurrencyLineSync(line: string): string | null {
   const trimmed = line.trimEnd();
   if (!trimmed.endsWith('=')) return null;
 
   const expr = trimmed.slice(0, -1).trim();
   if (!expr) return null;
 
-  const result = await evaluateCurrencyExpression(expr);
+  const cache = getRatesSync();
+  if (!cache) return null;
+
+  const result = evaluateCurrencyExpressionSync(expr, cache.rates);
   if (result) {
     return trimmed + ' ' + result;
   }
   return null;
+}
+
+/** Async version with fetch fallback */
+export async function evaluateCurrencyExpression(expr: string): Promise<string | null> {
+  const cache = await fetchRates();
+  if (!cache) return null;
+  return evaluateCurrencyExpressionSync(expr, cache.rates);
 }

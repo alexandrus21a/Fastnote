@@ -26,10 +26,6 @@ export default function App() {
 
   const { settings, setSettings } = useSettings();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const isMagicMathOn = settings.magicMath === 'on';
-  const isMagicCurrencyOn = settings.magicCurrency === 'on';
-  const isMagicUnitsOn = settings.magicUnits === 'on';
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
@@ -71,9 +67,7 @@ export default function App() {
       <NoteEditor
         note={activeNote}
         editorMode={settings.editorMode}
-        magicMath={isMagicMathOn}
-        magicCurrency={isMagicCurrencyOn}
-        magicUnits={isMagicUnitsOn}
+        magicFeatures={settings.magicFeatures}
         onUpdate={updateNote}
         onToggleSidebar={() => setSidebarOpen((s) => !s)}
         onCreate={() => {
@@ -87,14 +81,10 @@ export default function App() {
         notes={notes}
         theme={settings.theme}
         editorMode={settings.editorMode}
-        magicMath={settings.magicMath}
-        magicCurrency={settings.magicCurrency}
-        magicUnits={settings.magicUnits}
+        magicFeatures={settings.magicFeatures}
         onThemeChange={(theme) => setSettings({ theme })}
         onEditorModeChange={(editorMode) => setSettings({ editorMode })}
-        onMagicMathChange={(magicMath) => setSettings({ magicMath })}
-        onMagicCurrencyChange={(magicCurrency) => setSettings({ magicCurrency })}
-        onMagicUnitsChange={(magicUnits) => setSettings({ magicUnits })}
+        onMagicFeaturesChange={(magicFeatures) => setSettings({ magicFeatures })}
         onImport={setAllNotes}
         onClose={() => setSettingsOpen(false)}
       />

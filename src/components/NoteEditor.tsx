@@ -15,27 +15,26 @@ import { saveAs } from 'file-saver';
 import type { Note } from '../types/note';
 import type { EditorMode } from '../hooks/useSettings';
 import { autoCalculateLine } from '../utils/math';
-import { autoCalculateCurrencyLine } from '../utils/currency';
+import { autoCalculateCurrencyLineSync } from '../utils/currency';
 import { autoCalculateUnitLine } from '../utils/units';
 
 interface NoteEditorProps {
   note: Note | null;
   editorMode: EditorMode;
-  magicMath: boolean;
-  magicCurrency: boolean;
-  magicUnits: boolean;
+  magicFeatures: boolean;
   onUpdate: (id: string, updates: Partial<Pick<Note, 'title' | 'content'>>) => void;
   onToggleSidebar: () => void;
   onCreate: () => void;
 }
 
-export function NoteEditor({ note, editorMode, magicMath, magicCurrency, magicUnits, onUpdate, onToggleSidebar, onCreate }: NoteEditorProps) {
+export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggleSidebar, onCreate }: NoteEditorProps) {
   const { t } = useTranslation();
   const [preview, setPreview] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchIndex, setSearchIndex] = useState(0);
+  const [magicPreview, setMagicPreview] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -337,8 +336,37 @@ export function NoteEditor({ note, editorMode, magicMath, magicCurrency, magicUn
               placeholder={isSimple ? (t('startWritingSimple') || 'Start writing...') : t('startWriting')}
               value={note.content}
               onChange={(e) => onUpdate(note.id, { content: e.target.value })}
-              onKeyDown={async (e) => {
-                if (!note || e.key !== '=') return;
+              onInput={() => {
+                if (!magicFeatures || !note || !textareaRef.current) {
+                  setMagicPreview(null);
+                  return;
+                }
+                const el = textareaRef.current;
+                const cursorPos = el.selectionStart;
+                const value = el.value;
+                const lineStart = value.lastIndexOf('\n', cursorPos - 1) + 1;
+                const lineEnd = value.indexOf('\n', cursorPos);
+                const line = value.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
+
+                if (!line.trimEnd().endsWith('=')) {
+                  setMagicPreview(null);
+                  return;
+                }
+
+                let result = autoCalculateLine(line, value);
+                if (!result) result = autoCalculateUnitLine(line);
+                if (!result) result = autoCalculateCurrencyLineSync(line);
+
+                if (result) {
+                  // Extract just the computed part (after the =)
+                  const computed = result.slice(line.trimEnd().length).trim();
+                  setMagicPreview(computed);
+                } else {
+                  setMagicPreview(null);
+                }
+              }}
+              onKeyDown={(e) => {
+                if (!magicFeatures || !note || e.key !== '=') return;
                 const el = e.currentTarget;
                 const cursorPos = el.selectionStart;
                 const value = el.value;
@@ -346,19 +374,9 @@ export function NoteEditor({ note, editorMode, magicMath, magicCurrency, magicUn
                 const lineEnd = value.indexOf('\n', cursorPos);
                 const line = value.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
 
-                let result: string | null = null;
-
-                if (magicMath) {
-                  result = autoCalculateLine(line, value);
-                }
-
-                if (!result && magicUnits) {
-                  result = autoCalculateUnitLine(line);
-                }
-
-                if (!result && magicCurrency) {
-                  result = await autoCalculateCurrencyLine(line);
-                }
+                let result = autoCalculateLine(line, value);
+                if (!result) result = autoCalculateUnitLine(line);
+                if (!result) result = autoCalculateCurrencyLineSync(line);
 
                 if (result) {
                   e.preventDefault();
@@ -366,6 +384,7 @@ export function NoteEditor({ note, editorMode, magicMath, magicCurrency, magicUn
                   const after = lineEnd === -1 ? '' : value.slice(lineEnd);
                   const newValue = before + result + after;
                   onUpdate(note.id, { content: newValue });
+                  setMagicPreview(null);
                   requestAnimationFrame(() => {
                     const newPos = lineStart + result!.length;
                     el.setSelectionRange(newPos, newPos);
@@ -381,6 +400,16 @@ export function NoteEditor({ note, editorMode, magicMath, magicCurrency, magicUn
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {note.content || t('nothingToPreview')}
                 </ReactMarkdown>
+              </div>
+            </div>
+          )}
+
+          {/* Magic preview badge */}
+          {magicPreview && (
+            <div className="absolute bottom-3 right-5 z-10">
+              <div className="glass-panel-strong px-3 py-1.5 rounded-xl text-sm font-medium text-primary shadow-md border border-primary/20 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                <span className="opacity-50 mr-1">=</span>
+                {magicPreview}
               </div>
             </div>
           )}
