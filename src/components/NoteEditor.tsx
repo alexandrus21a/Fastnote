@@ -15,17 +15,19 @@ import { saveAs } from 'file-saver';
 import type { Note } from '../types/note';
 import type { EditorMode } from '../hooks/useSettings';
 import { autoCalculateLine } from '../utils/math';
+import { autoCalculateCurrencyLine } from '../utils/currency';
 
 interface NoteEditorProps {
   note: Note | null;
   editorMode: EditorMode;
   magicMath: boolean;
+  magicCurrency: boolean;
   onUpdate: (id: string, updates: Partial<Pick<Note, 'title' | 'content'>>) => void;
   onToggleSidebar: () => void;
   onCreate: () => void;
 }
 
-export function NoteEditor({ note, editorMode, magicMath, onUpdate, onToggleSidebar, onCreate }: NoteEditorProps) {
+export function NoteEditor({ note, editorMode, magicMath, magicCurrency, onUpdate, onToggleSidebar, onCreate }: NoteEditorProps) {
   const { t } = useTranslation();
   const [preview, setPreview] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
@@ -333,15 +335,25 @@ export function NoteEditor({ note, editorMode, magicMath, onUpdate, onToggleSide
               placeholder={isSimple ? (t('startWritingSimple') || 'Start writing...') : t('startWriting')}
               value={note.content}
               onChange={(e) => onUpdate(note.id, { content: e.target.value })}
-              onKeyDown={(e) => {
-                if (!magicMath || !note || e.key !== '=') return;
+              onKeyDown={async (e) => {
+                if (!note || e.key !== '=') return;
                 const el = e.currentTarget;
                 const cursorPos = el.selectionStart;
                 const value = el.value;
                 const lineStart = value.lastIndexOf('\n', cursorPos - 1) + 1;
                 const lineEnd = value.indexOf('\n', cursorPos);
                 const line = value.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
-                const result = autoCalculateLine(line);
+
+                let result: string | null = null;
+
+                if (magicMath) {
+                  result = autoCalculateLine(line);
+                }
+
+                if (!result && magicCurrency) {
+                  result = await autoCalculateCurrencyLine(line);
+                }
+
                 if (result) {
                   e.preventDefault();
                   const before = value.slice(0, lineStart);
@@ -349,7 +361,7 @@ export function NoteEditor({ note, editorMode, magicMath, onUpdate, onToggleSide
                   const newValue = before + result + after;
                   onUpdate(note.id, { content: newValue });
                   requestAnimationFrame(() => {
-                    const newPos = lineStart + result.length;
+                    const newPos = lineStart + result!.length;
                     el.setSelectionRange(newPos, newPos);
                     el.focus();
                   });

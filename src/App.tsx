@@ -28,6 +28,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isMagicMathOn = settings.magicMath === 'on';
+  const isMagicCurrencyOn = settings.magicCurrency === 'on';
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
@@ -70,6 +71,7 @@ export default function App() {
         note={activeNote}
         editorMode={settings.editorMode}
         magicMath={isMagicMathOn}
+        magicCurrency={isMagicCurrencyOn}
         onUpdate={updateNote}
         onToggleSidebar={() => setSidebarOpen((s) => !s)}
         onCreate={() => {
@@ -84,9 +86,11 @@ export default function App() {
         theme={settings.theme}
         editorMode={settings.editorMode}
         magicMath={settings.magicMath}
+        magicCurrency={settings.magicCurrency}
         onThemeChange={(theme) => setSettings({ theme })}
         onEditorModeChange={(editorMode) => setSettings({ editorMode })}
         onMagicMathChange={(magicMath) => setSettings({ magicMath })}
+        onMagicCurrencyChange={(magicCurrency) => setSettings({ magicCurrency })}
         onImport={setAllNotes}
         onClose={() => setSettingsOpen(false)}
       />
