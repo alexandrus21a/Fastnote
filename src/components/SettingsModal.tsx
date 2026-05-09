@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Download, Upload, Lock, FileJson, Palette, Type, Settings, Sparkles, Monitor, Terminal } from 'lucide-react';
 import type { Note } from '../types/note';
-import type { AppTheme, EditorMode, MagicMathMode, MagicCurrencyMode } from '../hooks/useSettings';
+import type { AppTheme, EditorMode, MagicMathMode, MagicCurrencyMode, MagicUnitsMode } from '../hooks/useSettings';
 import { encryptData, decryptData, type EncryptedBundle } from '../utils/crypto';
 
 interface SettingsModalProps {
@@ -12,10 +12,12 @@ interface SettingsModalProps {
   editorMode: EditorMode;
   magicMath: MagicMathMode;
   magicCurrency: MagicCurrencyMode;
+  magicUnits: MagicUnitsMode;
   onThemeChange: (theme: AppTheme) => void;
   onEditorModeChange: (mode: EditorMode) => void;
   onMagicMathChange: (mode: MagicMathMode) => void;
   onMagicCurrencyChange: (mode: MagicCurrencyMode) => void;
+  onMagicUnitsChange: (mode: MagicUnitsMode) => void;
   onImport: (notes: Note[]) => void;
   onClose: () => void;
 }
@@ -38,10 +40,12 @@ export function SettingsModal({
   editorMode,
   magicMath,
   magicCurrency,
+  magicUnits,
   onThemeChange,
   onEditorModeChange,
   onMagicMathChange,
   onMagicCurrencyChange,
+  onMagicUnitsChange,
   onImport,
   onClose,
 }: SettingsModalProps) {
@@ -246,6 +250,29 @@ export function SettingsModal({
                 </div>
                 <p className="text-xs text-base-content/40 leading-relaxed">
                   {t('magicCurrencyDesc') || 'Type "100$+2€=" and the total appears automatically.'}
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-xs font-bold tracking-widest uppercase text-base-content/40">
+                  {t('magicUnits') || 'Magic Units'}
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <button
+                    className={`btn btn-sm flex-1 rounded-xl ${magicUnits === 'on' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
+                    onClick={() => onMagicUnitsChange('on')}
+                  >
+                    {t('on') || 'On'}
+                  </button>
+                  <button
+                    className={`btn btn-sm flex-1 rounded-xl ${magicUnits === 'off' ? 'btn-primary' : 'btn-ghost bg-base-200'}`}
+                    onClick={() => onMagicUnitsChange('off')}
+                  >
+                    {t('off') || 'Off'}
+                  </button>
+                </div>
+                <p className="text-xs text-base-content/40 leading-relaxed">
+                  {t('magicUnitsDesc') || 'Type "15km+3mi=" or "100lb to kg=" and the result appears.'}
                 </p>
               </div>
             </div>

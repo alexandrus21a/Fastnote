@@ -4,6 +4,7 @@ export type EditorMode = 'markdown' | 'simple';
 export type AppTheme = 'light' | 'dark' | 'pink' | 'forest' | 'luxury' | 'liquid-glass' | 'win96' | 'hacker';
 export type MagicMathMode = 'off' | 'on';
 export type MagicCurrencyMode = 'off' | 'on';
+export type MagicUnitsMode = 'off' | 'on';
 
 const SETTINGS_KEY = 'fastnote:settings';
 
@@ -12,6 +13,7 @@ export interface AppSettings {
   editorMode: EditorMode;
   magicMath: MagicMathMode;
   magicCurrency: MagicCurrencyMode;
+  magicUnits: MagicUnitsMode;
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
@@ -19,6 +21,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   editorMode: 'markdown',
   magicMath: 'off',
   magicCurrency: 'off',
+  magicUnits: 'off',
 };
 
 function loadSettings(): AppSettings {

@@ -25,6 +25,8 @@
   "magicMathDesc": "Type \"1+1=\" and the result \"2\" appears automatically.",
   "magicCurrency": "Magic Currency",
   "magicCurrencyDesc": "Type \"100$+2€=\" and the total appears automatically.",
+  "magicUnits": "Magic Units",
+  "magicUnitsDesc": "Type \"15km+3mi=\" or \"100lb to kg=\" and the result appears.",
   "noteTitle": "Note title...",
   "startWriting": "Start writing in markdown...",
   "startWritingSimple": "Start writing...",

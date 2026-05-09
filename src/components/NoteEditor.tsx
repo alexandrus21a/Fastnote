@@ -16,18 +16,20 @@ import type { Note } from '../types/note';
 import type { EditorMode } from '../hooks/useSettings';
 import { autoCalculateLine } from '../utils/math';
 import { autoCalculateCurrencyLine } from '../utils/currency';
+import { autoCalculateUnitLine } from '../utils/units';
 
 interface NoteEditorProps {
   note: Note | null;
   editorMode: EditorMode;
   magicMath: boolean;
   magicCurrency: boolean;
+  magicUnits: boolean;
   onUpdate: (id: string, updates: Partial<Pick<Note, 'title' | 'content'>>) => void;
   onToggleSidebar: () => void;
   onCreate: () => void;
 }
 
-export function NoteEditor({ note, editorMode, magicMath, magicCurrency, onUpdate, onToggleSidebar, onCreate }: NoteEditorProps) {
+export function NoteEditor({ note, editorMode, magicMath, magicCurrency, magicUnits, onUpdate, onToggleSidebar, onCreate }: NoteEditorProps) {
   const { t } = useTranslation();
   const [preview, setPreview] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
@@ -347,7 +349,11 @@ export function NoteEditor({ note, editorMode, magicMath, magicCurrency, onUpdat
                 let result: string | null = null;
 
                 if (magicMath) {
-                  result = autoCalculateLine(line);
+                  result = autoCalculateLine(line, value);
+                }
+
+                if (!result && magicUnits) {
+                  result = autoCalculateUnitLine(line);
                 }
 
                 if (!result && magicCurrency) {
