@@ -44,6 +44,22 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, onUpda
 
   const visibilityClass = mobileView === 'editor' ? 'flex flex-col' : 'hidden lg:flex lg:flex-col';
 
+  const acceptMagicPreview = useCallback(() => {
+    if (!magicPreview || !note || !textareaRef.current) return;
+    const el = textareaRef.current;
+    const cursorPos = el.selectionStart;
+    const value = el.value;
+    const newValue = value.slice(0, cursorPos) + magicPreview + ' ' + value.slice(cursorPos);
+    onUpdate(note.id, { content: newValue });
+    setMagicPreview(null);
+    setMagicBadgePos(null);
+    requestAnimationFrame(() => {
+      const newPos = cursorPos + magicPreview.length + 1;
+      el.setSelectionRange(newPos, newPos);
+      el.focus();
+    });
+  }, [magicPreview, note, onUpdate]);
+
   useEffect(() => {
     if (note && textareaRef.current && !showPreview) {
       textareaRef.current.focus();
@@ -379,18 +395,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, onUpda
 
               if ((e.key === ' ' || e.key === 'Tab') && magicPreview) {
                 e.preventDefault();
-                const before = value.slice(0, cursorPos);
-                const after = value.slice(cursorPos);
-                const spacer = e.key === 'Tab' ? '\t' : ' ';
-                const newValue = before + magicPreview + spacer + after;
-                onUpdate(note.id, { content: newValue });
-                setMagicPreview(null);
-                setMagicBadgePos(null);
-                requestAnimationFrame(() => {
-                  const newPos = cursorPos + magicPreview.length + 1;
-                  el.setSelectionRange(newPos, newPos);
-                  el.focus();
-                });
+                acceptMagicPreview();
                 return;
               }
 
@@ -417,19 +422,26 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, onUpda
             }}
           />
 
-          {/* Magic preview badge */}
+          {/* Magic preview badge — iOS Notes style */}
           {magicPreview && magicBadgePos && (
             <div
-              className="absolute z-10 pointer-events-none"
+              key={magicPreview}
+              className="absolute z-10"
               style={{
-                top: magicBadgePos.top + 4,
-                left: magicBadgePos.left + 8,
+                top: magicBadgePos.top + 28,
+                left: Math.max(16, magicBadgePos.left - 4),
               }}
             >
-              <div className="bg-base-100/95 backdrop-blur-sm px-2.5 py-1 rounded-lg text-sm font-medium text-primary shadow-lg border border-primary/20 flex items-center gap-1.5">
-                <Sparkles size={12} />
-                {magicPreview}
-              </div>
+              <button
+                className="magic-result-badge inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-content text-[13px] font-semibold shadow-lg"
+                onMouseDown={(e) => { e.preventDefault(); acceptMagicPreview(); }}
+                onTouchEnd={(e) => { e.preventDefault(); acceptMagicPreview(); }}
+                tabIndex={-1}
+              >
+                <Sparkles size={11} className="opacity-70 shrink-0" />
+                <span>{magicPreview}</span>
+                <kbd className="text-[10px] font-normal opacity-50 ml-0.5 hidden sm:inline">tab</kbd>
+              </button>
             </div>
           )}
         </div>
