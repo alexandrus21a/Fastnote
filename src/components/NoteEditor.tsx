@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Bold, Italic, Heading, List, ListOrdered, Link, Quote, Code,
-  Eye, EyeOff, Menu, Strikethrough, CheckSquare, Image,
+  Eye, EyeOff, Strikethrough, CheckSquare, Image,
   SeparatorHorizontal, Download, Search, X, ChevronUp, ChevronDown,
   PenLine, Sparkles, Plus,
 } from 'lucide-react';
@@ -23,12 +23,12 @@ interface NoteEditorProps {
   note: Note | null;
   editorMode: EditorMode;
   magicFeatures: boolean;
+  mobileView: 'list' | 'editor';
   onUpdate: (id: string, updates: Partial<Pick<Note, 'title' | 'content'>>) => void;
-  onToggleSidebar: () => void;
   onCreate: () => void;
 }
 
-export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggleSidebar, onCreate }: NoteEditorProps) {
+export function NoteEditor({ note, editorMode, magicFeatures, mobileView, onUpdate, onCreate }: NoteEditorProps) {
   const { t } = useTranslation();
   const [showPreview, setShowPreview] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
@@ -41,7 +41,8 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
   const previewRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const getCaretPos = useCaretPosition();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+
+  const visibilityClass = mobileView === 'editor' ? 'flex flex-col' : 'hidden lg:flex lg:flex-col';
 
   useEffect(() => {
     if (note && textareaRef.current && !showPreview) {
@@ -201,13 +202,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
 
   if (!note) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-base-content/25 p-8">
-        <button
-          className="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-base-200 transition-colors text-base-content/40 mb-8"
-          onClick={onToggleSidebar}
-        >
-          <Menu size={18} />
-        </button>
+      <div className={`flex-1 items-center justify-center text-base-content/25 p-8 bg-base-100 pb-16 lg:pb-0 ${visibilityClass}`}>
         <div className="w-12 h-12 rounded-xl bg-base-200/50 flex items-center justify-center mb-4">
           <PenLine size={20} className="text-base-content/15" />
         </div>
@@ -226,15 +221,9 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
   const isSimple = editorMode === 'simple';
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 bg-base-100">
+    <div className={`flex-1 min-w-0 bg-base-100 pb-16 lg:pb-0 ${visibilityClass}`}>
       {/* Title bar */}
       <div className="flex items-center gap-2 px-5 pt-4 pb-2">
-        <button
-          className="lg:hidden inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
-          onClick={onToggleSidebar}
-        >
-          <Menu size={16} />
-        </button>
         <input
           type="text"
           className="flex-1 bg-transparent text-xl font-semibold tracking-tight outline-none placeholder:text-base-content/20 text-base-content/90 py-1"
@@ -253,7 +242,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
                 <Search size={15} />
               </button>
               <button
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
+                className="hidden lg:inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
                 onClick={() => setShowPreview((p) => !p)}
                 title={showPreview ? t('edit') : t('preview')}
               >
@@ -318,14 +307,14 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
       {/* Markdown toolbar */}
       {!isSimple && (
         <div className="px-5 py-1.5 border-b border-base-300/20 flex items-center gap-0.5 overflow-x-auto">
-          {toolbarActions.map((t) => (
+          {toolbarActions.map((tb) => (
             <button
-              key={t.title}
+              key={tb.title}
               className="inline-flex items-center justify-center w-7 h-7 rounded-md hover:bg-base-200/70 transition-colors text-base-content/40 flex-shrink-0"
-              onClick={t.action}
-              title={t.title}
+              onClick={tb.action}
+              title={tb.title}
             >
-              <t.icon size={13} strokeWidth={2} />
+              <tb.icon size={13} strokeWidth={2} />
             </button>
           ))}
         </div>
@@ -333,7 +322,13 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
 
       {/* Editor / Preview */}
       <div className="flex-1 flex min-h-0 relative">
-        <div className={`flex-1 flex flex-col min-w-0 relative ${(!isSimple && showPreview && !isMobile) ? 'border-r border-base-300/20' : ''} ${(!isSimple && showPreview && isMobile) ? 'hidden' : 'flex'}`}>
+        {/* Editor pane: hidden on mobile when preview is active, side-by-side on desktop */}
+        <div className={[
+          'flex-col min-w-0 relative',
+          !isSimple && showPreview
+            ? 'hidden lg:flex lg:flex-1 lg:border-r lg:border-base-300/20'
+            : 'flex flex-1',
+        ].join(' ')}>
           <textarea
             ref={textareaRef}
             className="flex-1 w-full resize-none outline-none bg-transparent p-5 text-[15px] leading-[1.75] text-base-content/80"
@@ -439,6 +434,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
           )}
         </div>
 
+        {/* Preview pane */}
         {!isSimple && showPreview && (
           <div className="flex-1 min-w-0 overflow-y-auto p-5">
             <div ref={previewRef} className="markdown-preview prose max-w-none">
@@ -451,9 +447,12 @@ export function NoteEditor({ note, editorMode, magicFeatures, onUpdate, onToggle
       </div>
 
       {/* Mobile preview toggle */}
-      {!isSimple && isMobile && (
-        <div className="border-t border-base-300/20 p-2 flex justify-center sm:hidden">
-          <button className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-base-200 text-sm text-base-content/60 transition-colors" onClick={() => setShowPreview((p) => !p)}>
+      {!isSimple && (
+        <div className="border-t border-base-300/20 p-2 flex justify-center lg:hidden">
+          <button
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-base-200 text-sm text-base-content/60 transition-colors"
+            onClick={() => setShowPreview((p) => !p)}
+          >
             {showPreview ? <EyeOff size={14} /> : <Eye size={14} />}
             {showPreview ? t('edit') : t('preview')}
           </button>
