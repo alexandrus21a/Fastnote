@@ -222,6 +222,24 @@ body.theme-liquid-glass .text-base-content\/70 svg {
   opacity: 0.75;
 }
 
+/* Liquid glass — floating panels */
+body.theme-liquid-glass aside.glass-panel,
+body.theme-liquid-glass .glass-panel {
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.03),
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    0 20px 48px rgba(0, 0, 0, 0.05);
+}
+
+/* Remove inner dividing border so panels float independently */
+body.theme-liquid-glass aside {
+  border-right: none !important;
+}
+
 /* ========== WIN96 THEME ========== */
 body.theme-win96 {
   background: #008080;
