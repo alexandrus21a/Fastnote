@@ -318,15 +318,104 @@ body.theme-win96 .btn-circle {
   border-radius: 0 !important;
 }
 
-body.theme-win96 .markdown-preview pre {
-  background: black;
-  color: #c0c0c0;
-  border-radius: 0;
-  font-family: 'Courier New', monospace;
+/* Win96 — full markdown preview styling */
+body.theme-win96 .markdown-preview {
+  font-family: 'Times New Roman', Times, serif;
+  color: #000;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+body.theme-win96 .markdown-preview h1 {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #000;
+  border-bottom: 2px inset #808080;
+  padding-bottom: 4px;
+  letter-spacing: 0;
+}
+body.theme-win96 .markdown-preview h2 {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #000;
+  border-bottom: 1px solid #808080;
+  padding-bottom: 2px;
+}
+body.theme-win96 .markdown-preview h3 {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.05rem;
+  font-weight: bold;
+  color: #000;
+}
+
+body.theme-win96 .markdown-preview a {
+  color: #0000cc;
+  text-decoration: underline;
 }
 
 body.theme-win96 .markdown-preview code {
-  background: #e0e0e0;
+  background: #ececec;
+  border: 1px inset #808080;
+  border-radius: 0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  padding: 1px 4px;
+  color: #000;
+}
+
+body.theme-win96 .markdown-preview pre {
+  background: #fff;
+  border: 2px inset #808080;
+  border-radius: 0;
+  font-family: 'Courier New', monospace;
+  color: #000;
+  padding: 10px;
+}
+
+body.theme-win96 .markdown-preview pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.82em;
+  line-height: 1.5;
+}
+
+body.theme-win96 .markdown-preview blockquote {
+  border-left: 3px solid #808080;
+  background: #ececec;
+  padding: 4px 12px;
+  margin: 8px 0;
+  font-style: italic;
+  color: #333;
+  opacity: 1;
+}
+
+body.theme-win96 .markdown-preview table {
+  border-collapse: collapse;
+  font-family: 'Tahoma', 'MS Sans Serif', sans-serif;
+  font-size: 12px;
+}
+body.theme-win96 .markdown-preview th,
+body.theme-win96 .markdown-preview td {
+  border: 1px solid #808080;
+  padding: 4px 8px;
+}
+body.theme-win96 .markdown-preview th {
+  background: #c0c0c0;
+  font-weight: bold;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+body.theme-win96 .markdown-preview hr {
+  border: none;
+  border-top: 2px inset #808080;
+}
+
+body.theme-win96 .markdown-preview img {
+  border: 2px inset #808080;
   border-radius: 0;
 }
 
