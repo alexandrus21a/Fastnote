@@ -6,7 +6,7 @@ import { NoteEditor } from './components/NoteEditor';
 import { SettingsModal } from './components/SettingsModal';
 import { ConfirmModal } from './components/ConfirmModal';
 import { useTranslation } from 'react-i18next';
-import { FileText, PenLine } from 'lucide-react';
+import { FileText, PenLine, Settings } from 'lucide-react';
 
 export default function App() {
   const { t } = useTranslation();
@@ -94,6 +94,13 @@ export default function App() {
         >
           <PenLine size={19} />
           <span>{t('editor')}</span>
+        </button>
+        <button
+          className="flex-1 flex flex-col items-center gap-1 py-3 text-[11px] font-medium text-base-content/40 transition-colors"
+          onClick={() => setSettingsOpen(true)}
+        >
+          <Settings size={19} />
+          <span>{t('settings')}</span>
         </button>
       </nav>
 

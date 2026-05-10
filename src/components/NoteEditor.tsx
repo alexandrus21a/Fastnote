@@ -401,9 +401,11 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, onUpda
 
               if (e.key !== '=') return;
 
-              let result = autoCalculateLine(line, value);
-              if (!result) result = autoCalculateUnitLine(line);
-              if (!result) result = autoCalculateCurrencyLineSync(line);
+              // keydown fires before '=' is inserted, so we simulate the completed line
+              const lineWithEq = line + '=';
+              let result = autoCalculateLine(lineWithEq, value);
+              if (!result) result = autoCalculateUnitLine(lineWithEq);
+              if (!result) result = autoCalculateCurrencyLineSync(lineWithEq);
 
               if (result) {
                 e.preventDefault();
