@@ -21,6 +21,7 @@ export default function App() {
 
   const isLiquidGlass = settings.theme === 'liquid-glass';
   const isWin96 = settings.theme === 'win96';
+  const isHacker = settings.theme === 'hacker';
 
   const handleDelete = (id: string) => setConfirmDelete(id);
   const confirmDeleteNote = () => {
@@ -92,26 +93,88 @@ export default function App() {
       </div>
 
       {/* Mobile bottom navigation */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-base-100/95 backdrop-blur-sm border-t border-base-300/30 flex">
-        <button
-          className={`flex-1 flex flex-col items-center gap-1 py-3 text-[11px] font-medium transition-colors ${mobileView === 'list' ? 'text-primary' : 'text-base-content/40'}`}
-          onClick={() => setMobileView('list')}
+      {isWin96 ? (
+        <nav
+          className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex"
+          style={{ background: '#c0c0c0', borderTop: '2px outset #dfdfdf', fontFamily: 'Tahoma, "MS Sans Serif", sans-serif' }}
         >
-          <FileText size={19} /><span>Notes</span>
-        </button>
-        <button
-          className={`flex-1 flex flex-col items-center gap-1 py-3 text-[11px] font-medium transition-colors ${mobileView === 'editor' ? 'text-primary' : 'text-base-content/40'}`}
-          onClick={() => setMobileView('editor')}
+          {([
+            { label: 'Notes', icon: '📁', view: 'list' as const },
+            { label: 'Editor', icon: '📝', view: 'editor' as const },
+          ]).map(({ label, icon, view }) => (
+            <button
+              key={view}
+              className="flex-1 flex flex-col items-center gap-0.5 py-2 text-[10px]"
+              style={{
+                color: mobileView === view ? '#000080' : '#000',
+                fontWeight: mobileView === view ? 'bold' : 'normal',
+                borderRight: '1px solid #808080',
+              }}
+              onClick={() => setMobileView(view)}
+            >
+              <span className="text-[18px] leading-none">{icon}</span>
+              <span>{label}</span>
+            </button>
+          ))}
+          <button
+            className="flex-1 flex flex-col items-center gap-0.5 py-2 text-[10px]"
+            style={{ color: '#000' }}
+            onClick={() => setSettingsOpen(true)}
+          >
+            <span className="text-[18px] leading-none">⚙️</span>
+            <span>Settings</span>
+          </button>
+        </nav>
+      ) : isHacker ? (
+        <nav
+          className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex"
+          style={{ background: '#050505', borderTop: '1px solid #003300', fontFamily: '"Courier New", monospace' }}
         >
-          <PenLine size={19} /><span>{t('editor')}</span>
-        </button>
-        <button
-          className="flex-1 flex flex-col items-center gap-1 py-3 text-[11px] font-medium text-base-content/40 transition-colors"
-          onClick={() => setSettingsOpen(true)}
+          {([
+            { label: '[ls]', view: 'list' as const },
+            { label: '[vim]', view: 'editor' as const },
+          ]).map(({ label, view }) => (
+            <button
+              key={view}
+              className="flex-1 py-3 text-[12px] font-bold transition-colors"
+              style={{ color: mobileView === view ? '#00ff41' : '#004400' }}
+              onClick={() => setMobileView(view)}
+            >
+              {label}
+            </button>
+          ))}
+          <button
+            className="flex-1 py-3 text-[12px] transition-colors"
+            style={{ color: '#004400' }}
+            onClick={() => setSettingsOpen(true)}
+          >
+            [cfg]
+          </button>
+        </nav>
+      ) : (
+        <nav className={`lg:hidden fixed bottom-0 inset-x-0 z-40 border-t flex ${isLiquidGlass ? 'border-white/30' : 'border-base-300/30'}`}
+             style={isLiquidGlass ? { background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)' } : { background: 'var(--color-base-100)', backdropFilter: 'blur(8px)' }}
         >
-          <Settings size={19} /><span>{t('settings')}</span>
-        </button>
-      </nav>
+          <button
+            className={`flex-1 flex flex-col items-center gap-1 py-3 text-[11px] font-medium transition-colors ${mobileView === 'list' ? 'text-primary' : 'text-base-content/40'}`}
+            onClick={() => setMobileView('list')}
+          >
+            <FileText size={19} /><span>Notes</span>
+          </button>
+          <button
+            className={`flex-1 flex flex-col items-center gap-1 py-3 text-[11px] font-medium transition-colors ${mobileView === 'editor' ? 'text-primary' : 'text-base-content/40'}`}
+            onClick={() => setMobileView('editor')}
+          >
+            <PenLine size={19} /><span>{t('editor')}</span>
+          </button>
+          <button
+            className="flex-1 flex flex-col items-center gap-1 py-3 text-[11px] font-medium text-base-content/40 transition-colors"
+            onClick={() => setSettingsOpen(true)}
+          >
+            <Settings size={19} /><span>{t('settings')}</span>
+          </button>
+        </nav>
+      )}
 
       <SettingsModal
         open={settingsOpen} notes={notes} theme={settings.theme}
