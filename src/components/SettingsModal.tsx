@@ -30,21 +30,115 @@ const TABS: { key: TabKey; label: string; icon: typeof Palette }[] = [
   { key: 'data', label: 'Data', icon: FileJson },
 ];
 
-const THEMES: {
+interface StandardTheme {
   value: AppTheme;
   label: string;
-  group: string;
-  previewClass: string;
-  previewDot?: string;
-}[] = [
-  { value: 'light', label: 'Light', group: 'Default', previewClass: 'bg-white border-gray-200' },
-  { value: 'dark', label: 'Dark', group: 'Default', previewClass: 'bg-gray-900 border-gray-700' },
-  { value: 'pink', label: 'Pink', group: 'DaisyUI', previewClass: 'bg-pink-400 border-pink-300' },
-  { value: 'forest', label: 'Forest', group: 'DaisyUI', previewClass: 'bg-emerald-700 border-emerald-600' },
-  { value: 'luxury', label: 'Luxury', group: 'DaisyUI', previewClass: 'bg-purple-950 border-yellow-600' },
-  { value: 'liquid-glass', label: 'Liquid Glass', group: 'Custom', previewClass: 'bg-blue-400/40 border-blue-300/50 backdrop-blur-sm' },
-  { value: 'win96', label: 'Win 96', group: 'Custom', previewClass: 'bg-gray-400 border-gray-300' },
-  { value: 'hacker', label: 'Hacker', group: 'Custom', previewClass: 'bg-black border-green-500' },
+  dots: string[];
+}
+
+const STANDARD_THEMES: StandardTheme[] = [
+  { value: 'light',   label: 'Light',   dots: ['#f3f4f6', '#e05454', '#1f2937'] },
+  { value: 'dark',    label: 'Dark',    dots: ['#1e1e2e', '#f87171', '#e2e8f0'] },
+  { value: 'pink',    label: 'Pink',    dots: ['#fdf2f8', '#ec4899', '#4a044e'] },
+  { value: 'forest',  label: 'Forest',  dots: ['#0f1a12', '#22c55e', '#bbf7d0'] },
+  { value: 'luxury',  label: 'Luxury',  dots: ['#09090b', '#d97706', '#fef3c7'] },
+];
+
+function LiquidGlassPreview() {
+  return (
+    <div className="relative overflow-hidden rounded-lg h-full bg-gradient-to-br from-sky-100 via-white to-slate-100">
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 30% 40%, rgba(147,197,253,0.4) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(196,181,253,0.3) 0%, transparent 60%)' }} />
+      <div className="absolute inset-2.5 rounded-lg border border-white/70 shadow-md flex flex-col gap-1.5 p-2" style={{ background: 'rgba(255,255,255,0.52)', backdropFilter: 'blur(12px)' }}>
+        <div className="h-1.5 rounded-full bg-slate-300/60 w-3/4" />
+        <div className="h-1 rounded-full bg-slate-200/60 w-1/2" />
+        <div className="mt-auto flex gap-1">
+          <div className="h-4 rounded-md px-2 flex items-center" style={{ background: 'linear-gradient(135deg,#3b82f6,#0ea5e9)', boxShadow: '0 2px 8px rgba(59,130,246,0.4)' }}>
+            <div className="w-3 h-0.5 rounded-full bg-white/90" />
+          </div>
+          <div className="h-4 rounded-md px-1.5 bg-white/40 border border-white/50">
+            <div className="w-2 h-full flex items-center"><div className="w-full h-0.5 rounded-full bg-slate-400/50" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Win96Preview() {
+  return (
+    <div className="h-full rounded-lg overflow-hidden bg-[#c0c0c0]" style={{ fontFamily: 'Tahoma, "MS Sans Serif", sans-serif' }}>
+      <div className="h-5 flex items-center px-1.5 gap-1" style={{ background: 'linear-gradient(90deg,#000080,#1084d0)' }}>
+        <div className="w-3 h-3 bg-[#c0c0c0]/20 border border-white/20 rounded-sm" />
+        <span className="text-white text-[9px] font-bold flex-1 truncate">Fastnote</span>
+        <div className="flex gap-px">
+          {['_', '□', '×'].map((c) => (
+            <div key={c} className="w-3.5 h-3.5 bg-[#c0c0c0] flex items-center justify-center text-[9px] text-black" style={{ border: '1px outset #dfdfdf' }}>
+              {c}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="p-1.5 flex flex-col gap-1">
+        <div className="bg-white h-5 text-[9px] text-black flex items-center px-1 truncate" style={{ border: '2px inset #808080' }}>
+          My Note...
+        </div>
+        <div className="flex gap-1">
+          <div className="bg-[#c0c0c0] text-[9px] text-black px-2 py-0.5 flex items-center" style={{ border: '2px outset #dfdfdf' }}>
+            OK
+          </div>
+          <div className="bg-[#c0c0c0] text-[9px] text-black px-2 py-0.5 flex items-center" style={{ border: '2px outset #dfdfdf' }}>
+            Cancel
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HackerPreview() {
+  return (
+    <div className="h-full rounded-lg overflow-hidden bg-[#050505] relative p-2" style={{ fontFamily: '"Courier New", monospace' }}>
+      <div className="text-[9px] leading-[1.5] space-y-px">
+        <div style={{ color: '#00ff41' }}>$ fastnote --start</div>
+        <div style={{ color: '#00cc33' }}>{'>'} <span style={{ color: '#00ff41' }}>notes loaded</span></div>
+        <div style={{ color: '#00ff41' }}>$ 12*8=<span style={{ color: '#00ff41', fontWeight: 700 }}> 96</span></div>
+        <div style={{ color: '#008811' }}>_<span className="animate-pulse">█</span></div>
+      </div>
+      <div
+        className="absolute inset-0 pointer-events-none opacity-25"
+        style={{ background: 'repeating-linear-gradient(0deg,rgba(0,0,0,0.15),rgba(0,0,0,0.15) 1px,transparent 1px,transparent 2px)' }}
+      />
+      <div className="absolute inset-0 rounded-lg pointer-events-none" style={{ boxShadow: 'inset 0 0 12px rgba(0,255,65,0.08)' }} />
+    </div>
+  );
+}
+
+interface CustomThemeDef {
+  value: AppTheme;
+  label: string;
+  description: string;
+  preview: React.ReactNode;
+}
+
+const CUSTOM_THEMES: CustomThemeDef[] = [
+  {
+    value: 'liquid-glass',
+    label: 'Liquid Glass',
+    description: 'Frosted glass, soft gradients',
+    preview: <LiquidGlassPreview />,
+  },
+  {
+    value: 'win96',
+    label: 'Win 96',
+    description: 'Windows 95/96 retro',
+    preview: <Win96Preview />,
+  },
+  {
+    value: 'hacker',
+    label: 'Hacker',
+    description: 'Terminal, CRT scanlines',
+    preview: <HackerPreview />,
+  },
 ];
 
 export function SettingsModal({
@@ -136,7 +230,7 @@ export function SettingsModal({
   );
 
   const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <h4 className="text-[11px] font-bold tracking-widest uppercase text-base-content/30">{title}</h4>
       {children}
     </div>
@@ -144,14 +238,9 @@ export function SettingsModal({
 
   return (
     <div className="fixed inset-0 z-50">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity"
-        onClick={handleClose}
-      />
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={handleClose} />
 
-      {/* Drawer */}
-      <div className="absolute top-0 right-0 h-full w-full sm:w-[520px] bg-base-100 shadow-2xl flex flex-col drawer-enter">
+      <div className="absolute top-0 right-0 h-full w-full sm:w-[480px] bg-base-100 shadow-2xl flex flex-col drawer-enter">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-base-300/40 shrink-0">
           <div className="flex items-center gap-3">
@@ -160,246 +249,264 @@ export function SettingsModal({
             </div>
             <div>
               <h2 className="text-base font-semibold leading-tight">{t('settings')}</h2>
-              <p className="text-[11px] text-base-content/40 font-medium">Fastnote</p>
+              <p className="text-[11px] text-base-content/40">Fastnote</p>
             </div>
           </div>
-          <button
-            className="btn btn-sm btn-circle btn-ghost min-h-8 h-8 w-8"
-            onClick={handleClose}
-          >
+          <button className="btn btn-sm btn-circle btn-ghost min-h-8 h-8 w-8" onClick={handleClose}>
             <X size={16} />
           </button>
         </div>
 
-        {/* Mobile tabs */}
-        <div className="sm:hidden flex border-b border-base-300/40 overflow-x-auto">
-          {TABS.map((t) => (
+        {/* Tabs */}
+        <div className="flex border-b border-base-300/40 px-4 gap-1 shrink-0">
+          {TABS.map((tb) => (
             <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                tab === t.key
+              key={tb.key}
+              onClick={() => setTab(tb.key)}
+              className={`flex items-center gap-1.5 px-3 py-3 text-[13px] font-medium border-b-2 transition-colors whitespace-nowrap -mb-px ${
+                tab === tb.key
                   ? 'border-primary text-primary'
-                  : 'border-transparent text-base-content/50 hover:text-base-content'
+                  : 'border-transparent text-base-content/45 hover:text-base-content/70'
               }`}
             >
-              <t.icon size={15} />
-              {t.label}
+              <tb.icon size={13} />
+              {tb.label}
             </button>
           ))}
         </div>
 
-        {/* Body */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Desktop sidebar */}
-          <div className="hidden sm:flex w-52 flex-col border-r border-base-300/40 py-4">
-            {TABS.map((t) => (
-              <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                className={`flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm font-medium transition-all text-left ${
-                  tab === t.key
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-base-content/60 hover:bg-base-200/60 hover:text-base-content'
-                }`}
-              >
-                <t.icon size={16} />
-                {t.label}
-              </button>
-            ))}
-          </div>
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-5 space-y-7">
+          {tab === 'appearance' && (
+            <>
+              {/* Language */}
+              <Section title={t('language') || 'Language'}>
+                <div className="flex p-1 bg-base-200/60 rounded-xl gap-1">
+                  {(['en', 'ru'] as const).map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => i18n.changeLanguage(lang)}
+                      className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                        i18n.language === lang
+                          ? 'bg-base-100 text-base-content shadow-sm'
+                          : 'text-base-content/50 hover:text-base-content'
+                      }`}
+                    >
+                      <Languages size={14} />
+                      {lang === 'en' ? 'English' : 'Русский'}
+                    </button>
+                  ))}
+                </div>
+              </Section>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-8">
-            {tab === 'appearance' && (
-              <>
-                <Section title={t('language') || 'Language'}>
-                  <div className="flex p-1 bg-base-200/60 rounded-xl">
-                    {(['en', 'ru'] as const).map((lang) => (
+              {/* Standard Themes */}
+              <Section title="Themes">
+                <div className="grid grid-cols-2 gap-2">
+                  {STANDARD_THEMES.map((th) => {
+                    const active = theme === th.value;
+                    return (
                       <button
-                        key={lang}
-                        onClick={() => i18n.changeLanguage(lang)}
-                        className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
-                          i18n.language === lang
-                            ? 'bg-base-100 text-base-content shadow-sm'
-                            : 'text-base-content/50 hover:text-base-content'
+                        key={th.value}
+                        onClick={() => onThemeChange(th.value)}
+                        className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm transition-all border ${
+                          active
+                            ? 'bg-primary/8 border-primary/35 shadow-sm'
+                            : 'bg-base-200/40 border-transparent hover:bg-base-200/80 hover:border-base-300/40'
                         }`}
                       >
-                        <Languages size={14} />
-                        {lang === 'en' ? 'English' : 'Русский'}
-                      </button>
-                    ))}
-                  </div>
-                </Section>
-
-                <Section title={t('theme') || 'Theme'}>
-                  <div className="space-y-1">
-                    {['Default', 'DaisyUI', 'Custom'].map((group) => (
-                      <div key={group}>
-                        <div className="text-[10px] font-medium text-base-content/30 uppercase tracking-wider px-1 py-1.5">
-                          {group}
-                        </div>
-                        <div className="grid grid-cols-1 gap-1.5">
-                          {THEMES.filter((th) => th.group === group).map((th) => (
-                            <button
-                              key={th.value}
-                              onClick={() => onThemeChange(th.value)}
-                              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm transition-all border ${
-                                theme === th.value
-                                  ? 'bg-primary/8 border-primary/30 text-primary shadow-sm'
-                                  : 'bg-base-200/40 border-transparent hover:bg-base-200 text-base-content/80'
-                              }`}
-                            >
-                              <span
-                                className={`w-6 h-6 rounded-lg border shrink-0 ${th.previewClass}`}
-                              />
-                              <span className="font-medium">{th.label}</span>
-                              {theme === th.value && (
-                                <CheckCircle2 size={14} className="ml-auto text-primary shrink-0" />
-                              )}
-                            </button>
+                        {/* Color dots */}
+                        <div className="flex gap-px shrink-0">
+                          {th.dots.map((color, i) => (
+                            <span
+                              key={i}
+                              className="block rounded-full"
+                              style={{
+                                width: i === 0 ? 16 : 10,
+                                height: i === 0 ? 16 : 10,
+                                background: color,
+                                border: '1.5px solid rgba(0,0,0,0.08)',
+                                marginTop: i === 0 ? 0 : 3,
+                              }}
+                            />
                           ))}
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </Section>
-              </>
-            )}
+                        <span className={`text-[13px] font-medium flex-1 ${active ? 'text-primary' : 'text-base-content/80'}`}>
+                          {th.label}
+                        </span>
+                        {active && <CheckCircle2 size={13} className="text-primary shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </Section>
 
-            {tab === 'editor' && (
-              <>
-                <Section title={t('editorMode') || 'Editor Mode'}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button
-                      onClick={() => onEditorModeChange('markdown')}
-                      className={`flex flex-col items-start gap-2 p-4 rounded-xl border text-left transition-all ${
-                        editorMode === 'markdown'
-                          ? 'bg-primary/8 border-primary/30 shadow-sm'
-                          : 'bg-base-200/40 border-transparent hover:bg-base-200'
-                      }`}
-                    >
-                      <Code size={18} className={editorMode === 'markdown' ? 'text-primary' : 'text-base-content/50'} />
-                      <div>
-                        <div className={`text-sm font-semibold ${editorMode === 'markdown' ? 'text-primary' : 'text-base-content/90'}`}>
-                          Markdown
-                        </div>
-                        <div className="text-[11px] text-base-content/40 mt-0.5 leading-relaxed">
-                          {t('markdownDesc') || 'Preview, toolbar, formatting'}
-                        </div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => onEditorModeChange('simple')}
-                      className={`flex flex-col items-start gap-2 p-4 rounded-xl border text-left transition-all ${
-                        editorMode === 'simple'
-                          ? 'bg-primary/8 border-primary/30 shadow-sm'
-                          : 'bg-base-200/40 border-transparent hover:bg-base-200'
-                      }`}
-                    >
-                      <FileText size={18} className={editorMode === 'simple' ? 'text-primary' : 'text-base-content/50'} />
-                      <div>
-                        <div className={`text-sm font-semibold ${editorMode === 'simple' ? 'text-primary' : 'text-base-content/90'}`}>
-                          {t('simpleNote') || 'Simple Note'}
-                        </div>
-                        <div className="text-[11px] text-base-content/40 mt-0.5 leading-relaxed">
-                          {t('simpleDesc') || 'Plain text, no formatting'}
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                </Section>
+              {/* Custom Themes */}
+              <Section title="Custom Themes">
+                <div className="space-y-2">
+                  {CUSTOM_THEMES.map((th) => {
+                    const active = theme === th.value;
+                    return (
+                      <button
+                        key={th.value}
+                        onClick={() => onThemeChange(th.value)}
+                        className={`w-full flex items-stretch gap-3 rounded-xl overflow-hidden text-left transition-all border-2 ${
+                          active
+                            ? 'border-primary shadow-md'
+                            : 'border-transparent hover:border-base-300/60'
+                        }`}
+                        style={{ background: 'transparent' }}
+                      >
+                        {/* Mini preview */}
+                        <div className="w-28 h-20 shrink-0">{th.preview}</div>
 
-                <Section title={t('magicFeatures') || 'Magic Features'}>
-                  <div className="bg-base-200/30 rounded-xl p-4 space-y-1">
-                    <Switch
-                      checked={magicFeatures}
-                      onChange={onMagicFeaturesChange}
-                      label={t('magicFeatures') || 'Magic Features'}
-                      description={t('magicFeaturesDesc') || 'Auto-calculate math, currencies and units when typing "="'}
-                    />
-                  </div>
-                  <div className="flex flex-wrap gap-2 text-[11px] text-base-content/30 px-1">
-                    <span className="inline-flex items-center gap-1 bg-base-200/50 px-2 py-1 rounded-md">
-                      <Sparkles size={10} /> 1+1= → 2
-                    </span>
-                    <span className="inline-flex items-center gap-1 bg-base-200/50 px-2 py-1 rounded-md">
-                      <Sparkles size={10} /> 100$+2€=
-                    </span>
-                    <span className="inline-flex items-center gap-1 bg-base-200/50 px-2 py-1 rounded-md">
-                      <Sparkles size={10} /> 15km+3mi=
-                    </span>
-                  </div>
-                </Section>
-              </>
-            )}
+                        {/* Info */}
+                        <div className="flex-1 flex flex-col justify-center py-2 pr-3">
+                          <div className={`text-[14px] font-semibold leading-tight ${active ? 'text-primary' : 'text-base-content/85'}`}>
+                            {th.label}
+                          </div>
+                          <div className="text-[12px] text-base-content/40 mt-0.5 leading-snug">
+                            {th.description}
+                          </div>
+                          {active && (
+                            <div className="mt-2 inline-flex items-center gap-1 text-[11px] text-primary font-medium">
+                              <CheckCircle2 size={11} />
+                              Active
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Section>
+            </>
+          )}
 
-            {tab === 'data' && (
-              <>
-                <Section title={t('passphrase') || 'Passphrase'}>
-                  <div className="space-y-3">
-                    <input
-                      type="password"
-                      className="input input-bordered w-full h-11 rounded-xl text-sm bg-base-100"
-                      placeholder={t('enterPassphrase')}
-                      value={passphrase}
-                      onChange={(e) => setPassphrase(e.target.value)}
-                    />
-                    <div className="flex items-start gap-2 text-xs text-base-content/40 bg-base-200/30 p-3 rounded-xl">
-                      <Info size={14} className="shrink-0 mt-0.5 text-info" />
-                      <span>{t('exportingNotes', { count: notes.length })}</span>
+          {tab === 'editor' && (
+            <>
+              <Section title={t('editorMode') || 'Editor Mode'}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    onClick={() => onEditorModeChange('markdown')}
+                    className={`flex flex-col items-start gap-2 p-4 rounded-xl border text-left transition-all ${
+                      editorMode === 'markdown'
+                        ? 'bg-primary/8 border-primary/30 shadow-sm'
+                        : 'bg-base-200/40 border-transparent hover:bg-base-200'
+                    }`}
+                  >
+                    <Code size={18} className={editorMode === 'markdown' ? 'text-primary' : 'text-base-content/50'} />
+                    <div>
+                      <div className={`text-sm font-semibold ${editorMode === 'markdown' ? 'text-primary' : 'text-base-content/90'}`}>
+                        Markdown
+                      </div>
+                      <div className="text-[11px] text-base-content/40 mt-0.5 leading-relaxed">
+                        {t('markdownDesc')}
+                      </div>
                     </div>
-                  </div>
-                </Section>
-
-                <Section title={t('export') || 'Export'}>
-                  <button
-                    className="btn btn-primary w-full h-11 rounded-xl"
-                    onClick={handleExport}
-                  >
-                    <Download size={16} />
-                    {t('downloadBackup')}
                   </button>
-                </Section>
+                  <button
+                    onClick={() => onEditorModeChange('simple')}
+                    className={`flex flex-col items-start gap-2 p-4 rounded-xl border text-left transition-all ${
+                      editorMode === 'simple'
+                        ? 'bg-primary/8 border-primary/30 shadow-sm'
+                        : 'bg-base-200/40 border-transparent hover:bg-base-200'
+                    }`}
+                  >
+                    <FileText size={18} className={editorMode === 'simple' ? 'text-primary' : 'text-base-content/50'} />
+                    <div>
+                      <div className={`text-sm font-semibold ${editorMode === 'simple' ? 'text-primary' : 'text-base-content/90'}`}>
+                        {t('simpleNote')}
+                      </div>
+                      <div className="text-[11px] text-base-content/40 mt-0.5 leading-relaxed">
+                        {t('simpleDesc')}
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </Section>
 
-                <div className="h-px bg-base-300/40" />
-
-                <Section title={t('import') || 'Import'}>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".fastnote,.json"
-                    className="hidden"
-                    onChange={handleFileSelect}
+              <Section title={t('magicFeatures') || 'Magic Features'}>
+                <div className="bg-base-200/30 rounded-xl p-4 space-y-1">
+                  <Switch
+                    checked={magicFeatures}
+                    onChange={onMagicFeaturesChange}
+                    label={t('magicFeatures')}
+                    description={t('magicFeaturesDesc')}
                   />
-                  <button
-                    className="btn btn-outline w-full h-11 rounded-xl"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <Upload size={16} />
-                    {t('chooseFile')}
-                  </button>
-                  <div className="flex items-start gap-2 text-xs text-base-content/40 bg-warning/8 p-3 rounded-xl border border-warning/20">
-                    <TriangleAlert size={14} className="shrink-0 mt-0.5 text-warning" />
-                    <span>{t('importWarning')}</span>
-                  </div>
-                </Section>
+                </div>
+                <div className="flex flex-wrap gap-2 text-[11px] text-base-content/30 px-1">
+                  {['1+1= → 2', '100$+2€=', '15km+3mi='].map((ex) => (
+                    <span key={ex} className="inline-flex items-center gap-1 bg-base-200/50 px-2 py-1 rounded-md">
+                      <Sparkles size={10} /> {ex}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+            </>
+          )}
 
-                {error && (
-                  <div className="flex items-start gap-2 text-sm bg-error/8 p-3 rounded-xl border border-error/20 text-error">
-                    <AlertCircle size={16} className="shrink-0 mt-0.5" />
-                    <span>{error}</span>
+          {tab === 'data' && (
+            <>
+              <Section title={t('passphrase') || 'Passphrase'}>
+                <div className="space-y-3">
+                  <input
+                    type="password"
+                    className="input input-bordered w-full h-11 rounded-xl text-sm bg-base-100"
+                    placeholder={t('enterPassphrase')}
+                    value={passphrase}
+                    onChange={(e) => setPassphrase(e.target.value)}
+                  />
+                  <div className="flex items-start gap-2 text-xs text-base-content/40 bg-base-200/30 p-3 rounded-xl">
+                    <Info size={14} className="shrink-0 mt-0.5 text-info" />
+                    <span>{t('exportingNotes', { count: notes.length })}</span>
                   </div>
-                )}
-                {status && (
-                  <div className="flex items-start gap-2 text-sm bg-success/8 p-3 rounded-xl border border-success/20 text-success">
-                    <CheckCircle2 size={16} className="shrink-0 mt-0.5" />
-                    <span>{status}</span>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
+                </div>
+              </Section>
+
+              <Section title={t('export') || 'Export'}>
+                <button className="btn btn-primary w-full h-11 rounded-xl" onClick={handleExport}>
+                  <Download size={16} />
+                  {t('downloadBackup')}
+                </button>
+              </Section>
+
+              <div className="h-px bg-base-300/40" />
+
+              <Section title={t('import') || 'Import'}>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".fastnote,.json"
+                  className="hidden"
+                  onChange={handleFileSelect}
+                />
+                <button
+                  className="btn btn-outline w-full h-11 rounded-xl"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Upload size={16} />
+                  {t('chooseFile')}
+                </button>
+                <div className="flex items-start gap-2 text-xs text-base-content/40 bg-warning/8 p-3 rounded-xl border border-warning/20">
+                  <TriangleAlert size={14} className="shrink-0 mt-0.5 text-warning" />
+                  <span>{t('importWarning')}</span>
+                </div>
+              </Section>
+
+              {error && (
+                <div className="flex items-start gap-2 text-sm bg-error/8 p-3 rounded-xl border border-error/20 text-error">
+                  <AlertCircle size={16} className="shrink-0 mt-0.5" />
+                  <span>{error}</span>
+                </div>
+              )}
+              {status && (
+                <div className="flex items-start gap-2 text-sm bg-success/8 p-3 rounded-xl border border-success/20 text-success">
+                  <CheckCircle2 size={16} className="shrink-0 mt-0.5" />
+                  <span>{status}</span>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>
