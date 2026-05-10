@@ -47,7 +47,7 @@ export function NoteItem({ note, active, onSelect, onDelete, onTogglePin }: Note
               {note.title || t('untitledNote')}
             </span>
           </div>
-          <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-0.5 shrink-0 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
             <button
               className={`inline-flex items-center justify-center w-6 h-6 rounded-md transition-colors ${
                 active

@@ -41,8 +41,11 @@ export function useSettings() {
   useEffect(() => {
     const { theme } = settings;
 
-    // Always keep a base DaisyUI theme so CSS variables exist
-    const baseTheme = DAISY_THEMES.includes(theme) ? theme : 'light';
+    // Map internal theme names to DaisyUI v5 theme names where they differ
+    const DAISY_THEME_MAP: Partial<Record<AppTheme, string>> = { pink: 'cupcake' };
+    const baseTheme = DAISY_THEMES.includes(theme)
+      ? (DAISY_THEME_MAP[theme] ?? theme)
+      : 'light';
     document.documentElement.setAttribute('data-theme', baseTheme);
 
     // Remove old custom theme classes
