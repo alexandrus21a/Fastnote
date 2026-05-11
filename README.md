@@ -2,12 +2,13 @@
 
 # ⚡ Fastnote
 
-**A fast, offline-first note-taking app with magic calculations, markdown, and immersive themes.**
+**No accounts. No sync. No server. Just fast, private notes.**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-fastnote--app.vercel.app-black?style=for-the-badge&logo=vercel)](https://fastnote-app.vercel.app)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![PWA](https://img.shields.io/badge/PWA-offline--ready-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 [**Try it live →**](https://fastnote-app.vercel.app)
@@ -16,22 +17,22 @@
 
 ---
 
-## What is Fastnote?
+## ✨ Highlights
 
-Fastnote is a browser-based note app that lives entirely on your device — no accounts, no sync, no server. Notes are stored in `localStorage`, the app installs as a PWA, and works fully offline.
-
-The headline feature is **Magic** — type a math expression, unit conversion, or currency calculation ending with `=` and Fastnote inserts the result inline, iOS Notes-style.
+- **Magic calculations** — type `100$ + 2€ =` or `15km to mi =` and the answer appears inline
+- **Markdown editor** with live preview, toolbar, and GFM support — or switch to plain Simple mode
+- **8 themes** — including Liquid Glass, Win 96, and Hacker that transform the entire UI
+- **Encrypted backups** — AES-GCM `.fastnote` files you decrypt with a passphrase
+- **Fully offline** — stores everything in `localStorage`, installs as a PWA, no server ever
 
 ---
 
-## Features
+## 🪄 Magic Calculations
 
-### Magic Calculations
-
-Type any expression on a line, end it with `=`, and the result is inserted automatically. Press **Space** or **Tab** to accept the badge preview, or just keep typing `=` to commit immediately.
+End any expression with `=` and Fastnote inserts the result. Press `Space` or `Tab` to accept, or keep typing to commit.
 
 | Expression | Result |
-|------------|--------|
+|---|---|
 | `(12 + 8) * 5 =` | `100` |
 | `sqrt(144) =` | `12` |
 | `sin(30deg) =` | `0.5` |
@@ -40,74 +41,61 @@ Type any expression on a line, end it with `=`, and the result is inserted autom
 | `15kg to lbs =` | `33.07 lbs` |
 | `100$ + 2€ =` | live rate |
 
-Supported: arithmetic, variables, scientific functions (`sin`, `cos`, `sqrt`, `log`, `abs`, …), unit conversions (length, weight, temperature, …), and live currency via exchangerate-api.
+Supports arithmetic, variables, trig/log/scientific functions, unit conversions (length, weight, temp, …), and live currency rates.
 
 ---
 
-### Editor
+## 📝 Editor
 
-- **Markdown mode** — GFM support, formatting toolbar, live preview, side-by-side split on desktop
-- **Simple mode** — plain text, no distractions
-- In-note search with prev/next navigation
-- Auto-saves on every keystroke
+Two modes, switchable in Settings:
 
-**Toolbar actions:** Bold · Italic · Strikethrough · Heading · Divider · Bullet list · Numbered list · Task list · Link · Image · Blockquote · Code block
+- **Markdown** — GFM, formatting toolbar, live preview, side-by-side split on desktop
+- **Simple** — plain text, zero distractions
 
----
+Toolbar: `Bold` · `Italic` · `Strikethrough` · `Heading` · `Divider` · `Bullet list` · `Numbered list` · `Task list` · `Link` · `Image` · `Blockquote` · `Code block`
 
-### Notes
-
-- Create, edit, delete — instantly
-- Pin notes to the top
-- Full-text search across all notes
-- Auto-timestamped
+Each note exports as **TXT · Markdown · DOCX · PDF** or sends to the printer.
 
 ---
 
-### Export
+## 🎨 Themes
 
-Each note exports as: **TXT · Markdown · DOCX · PDF · Print**
-
----
-
-### Backup & Restore
-
-Export all notes as an AES-GCM encrypted `.fastnote` file (Web Crypto API). Import on any device with the same passphrase.
-
----
-
-### Themes
-
-Fastnote ships 8 themes — 5 standard and 3 fully custom themes that **reimagine the entire UI**, not just the color palette.
+5 standard color themes plus 3 fully custom themes that **reimagine the layout, chrome, and typography** — not just the palette.
 
 | Theme | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | Light | Standard | Clean light mode |
 | Dark | Standard | Dark mode |
-| Pink | Standard | DaisyUI cupcake |
-| Forest | Standard | DaisyUI forest green |
-| Luxury | Standard | DaisyUI purple/gold |
-| **Liquid Glass** | Custom | Frosted glass panels floating over a gradient backdrop |
-| **Win 96** | Custom | Authentic Windows 95/96 chrome — title bar, menu bar, inset fields, status bars |
-| **Hacker** | Custom | Terminal green-on-black, ASCII header, `ls`-style note list, vim status line, CRT scanlines |
-
-Custom themes don't just recolor the app — they transform the layout, typography, chrome, and interactive elements to match their aesthetic.
+| Pink | Standard | Soft pastel (DaisyUI cupcake) |
+| Forest | Standard | Deep forest green |
+| Luxury | Standard | Black & gold |
+| **Liquid Glass** | Custom | Frosted glass panels over a gradient backdrop |
+| **Win 96** | Custom | Windows 95/96 chrome — title bar, menu bar, inset fields, status bar |
+| **Hacker** | Custom | Terminal green-on-black, `ls` note list, CRT scanlines |
 
 ---
 
-### Responsive
+## ⌨️ Keyboard Shortcuts
 
-- **Desktop** — persistent sidebar + editor. Markdown preview opens in split view.
-- **Mobile** — bottom tab bar (Notes · Editor · Settings). Full-screen views, no drawer.
-- Installs as a **PWA** on desktop and mobile.
+| Shortcut | Action |
+|---|---|
+| `Ctrl K` | Command palette |
+| `Ctrl N` | New note |
+| `Ctrl /` | Focus search |
+| `Ctrl B` | Toggle sidebar |
+| `Ctrl ,` | Open settings |
 
-### Languages
-
-English and Russian — auto-detected from the browser, switchable in Settings.
+On macOS use `⌘` instead of `Ctrl`.
 
 ---
 
-## Getting Started
+## 💾 Backup & Restore
+
+Settings → Data → export all notes to an AES-GCM encrypted `.fastnote` file. Import on any device with the same passphrase. No cloud, no intermediary.
+
+---
+
+## 🚀 Getting Started
 
 ```bash
 npm install
@@ -124,20 +112,20 @@ npm run preview
 
 ---
 
-## Stack
+## 🛠 Stack
 
-| | |
-|-|-|
-| **Framework** | React 19 + TypeScript |
-| **Build** | Vite 8 |
-| **Styling** | Tailwind CSS v4 + DaisyUI 5 |
-| **Markdown** | react-markdown + remark-gfm |
-| **Icons** | lucide-react |
-| **Word export** | docx |
-| **PDF export** | jsPDF + html2canvas |
-| **i18n** | i18next + react-i18next |
-| **PWA** | vite-plugin-pwa |
-| **Crypto** | Web Crypto API (AES-GCM) |
+| Layer | Technology |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build | Vite 8 |
+| Styling | Tailwind CSS v4 + DaisyUI 5 |
+| Markdown | react-markdown + remark-gfm |
+| Icons | lucide-react |
+| Word export | docx |
+| PDF export | jsPDF + html2canvas |
+| i18n | i18next (EN + RU) |
+| PWA | vite-plugin-pwa |
+| Crypto | Web Crypto API (AES-GCM) |
 
 ---
 
