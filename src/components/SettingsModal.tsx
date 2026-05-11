@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import {
   X, Download, Upload, FileJson, Palette, Type, Settings,
   Code, FileText, Languages, Sparkles, TriangleAlert,
-  Info, CheckCircle2, AlertCircle, Lock, File,
+  Info, CheckCircle2, AlertCircle, Lock, File, Keyboard,
+  Plus, Search, PanelLeft, Command,
 } from 'lucide-react';
 import type { Note } from '../types/note';
 import type { AppTheme, EditorMode } from '../hooks/useSettings';
@@ -22,12 +23,21 @@ interface SettingsModalProps {
   onClose: () => void;
 }
 
-type TabKey = 'appearance' | 'editor' | 'data';
+type TabKey = 'appearance' | 'editor' | 'data' | 'shortcuts';
 
 const TABS: { key: TabKey; label: string; icon: typeof Palette }[] = [
   { key: 'appearance', label: 'Appearance', icon: Palette },
   { key: 'editor', label: 'Editor', icon: Type },
   { key: 'data', label: 'Data', icon: FileJson },
+  { key: 'shortcuts', label: 'Shortcuts', icon: Keyboard },
+];
+
+const SHORTCUT_ROWS: { icon: React.ReactNode; label: string; description: string; keys: string[] }[] = [
+  { icon: <Plus size={13} />, label: 'New Note', description: 'Create a new note', keys: ['Ctrl', 'N'] },
+  { icon: <Command size={13} />, label: 'Command Palette', description: 'Search and run any command', keys: ['Ctrl', 'K'] },
+  { icon: <Search size={13} />, label: 'Focus Search', description: 'Jump to the note search field', keys: ['Ctrl', '/'] },
+  { icon: <PanelLeft size={13} />, label: 'Toggle Sidebar', description: 'Switch between list and editor', keys: ['Ctrl', 'B'] },
+  { icon: <Settings size={13} />, label: 'Open Settings', description: 'Open this settings panel', keys: ['Ctrl', ','] },
 ];
 
 interface StandardTheme {
@@ -86,11 +96,11 @@ function Win96Preview() {
 
 function HackerPreview() {
   return (
-    <div className="h-full rounded-lg overflow-hidden bg-[#050505] relative p-2" style={{ fontFamily: '"Courier New", monospace' }}>
+    <div className="h-full rounded-lg overflow-hidden bg-[#0d0c0c] relative p-2" style={{ fontFamily: '"Courier New", monospace' }}>
       <div className="text-[9px] leading-[1.5] space-y-px">
-        <div style={{ color: '#00ff41' }}>$ fastnote --start</div>
-        <div style={{ color: '#00cc33' }}>{'>'} <span style={{ color: '#00ff41' }}>notes loaded</span></div>
-        <div style={{ color: '#00ff41' }}>$ 12*8=<span style={{ fontWeight: 700 }}> 96</span></div>
+        <div style={{ color: '#87a987' }}>$ fastnote --start</div>
+        <div style={{ color: '#00cc33' }}>{'>'} <span style={{ color: '#87a987' }}>notes loaded</span></div>
+        <div style={{ color: '#87a987' }}>$ 12*8=<span style={{ fontWeight: 700 }}> 96</span></div>
         <div style={{ color: '#008811' }}>_<span className="animate-pulse">█</span></div>
       </div>
       <div className="absolute inset-0 pointer-events-none opacity-25" style={{ background: 'repeating-linear-gradient(0deg,rgba(0,0,0,.15),rgba(0,0,0,.15) 1px,transparent 1px,transparent 2px)' }} />
@@ -351,6 +361,39 @@ export function SettingsModal({
                 </div>
               </Section>
             </>
+          )}
+
+          {/* ── SHORTCUTS ───────────────────────────────────────────────── */}
+          {tab === 'shortcuts' && (
+            <Section title="Keyboard Shortcuts">
+              <div className="space-y-1">
+                {SHORTCUT_ROWS.map(({ icon, label, description, keys }) => (
+                  <div
+                    key={label}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-base-200/30 hover:bg-base-200/60 transition-colors"
+                  >
+                    <span className="text-base-content/35 shrink-0">{icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[13px] font-medium text-base-content/85 leading-tight">{label}</div>
+                      <div className="text-[11px] text-base-content/35 mt-0.5">{description}</div>
+                    </div>
+                    <div className="shrink-0 flex items-center gap-0.5">
+                      {keys.map((k) => (
+                        <kbd
+                          key={k}
+                          className="inline-flex items-center justify-center px-2 py-1 text-[11px] font-mono font-medium bg-base-100 border border-base-300/60 rounded-md text-base-content/50 shadow-sm leading-none"
+                        >
+                          {k}
+                        </kbd>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[11px] text-base-content/30 px-1 pt-1">
+                On macOS, use <kbd className="font-mono text-[10px] px-1 py-0.5 bg-base-200 border border-base-300/50 rounded">⌘</kbd> instead of <kbd className="font-mono text-[10px] px-1 py-0.5 bg-base-200 border border-base-300/50 rounded">Ctrl</kbd>.
+              </p>
+            </Section>
           )}
 
           {/* ── DATA ─────────────────────────────────────────────────────── */}

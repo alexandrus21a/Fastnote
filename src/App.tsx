@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNotes } from './hooks/useNotes';
 import { useSettings } from './hooks/useSettings';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { NoteList } from './components/NoteList';
 import { NoteEditor } from './components/NoteEditor';
 import { SettingsModal } from './components/SettingsModal';
 import { ConfirmModal } from './components/ConfirmModal';
+import { CommandPalette, type PaletteCommand } from './components/CommandPalette';
 import { useTranslation } from 'react-i18next';
-import { FileText, PenLine, Settings } from 'lucide-react';
+import { FileText, PenLine, Settings, Plus, Search, PanelLeft } from 'lucide-react';
 
 export default function App() {
   const { t } = useTranslation();
@@ -16,8 +18,10 @@ export default function App() {
   } = useNotes();
   const { settings, setSettings } = useSettings();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const [mobileView, setMobileView] = useState<'list' | 'editor'>('list');
+  const [focusSearchTrigger, setFocusSearchTrigger] = useState(0);
 
   const isLiquidGlass = settings.theme === 'liquid-glass';
   const isWin96 = settings.theme === 'win96';
@@ -29,6 +33,23 @@ export default function App() {
   };
   const handleNoteSelect = (id: string) => { setActiveNoteId(id); setMobileView('editor'); };
   const handleCreate = () => { createNote(); setMobileView('editor'); };
+
+  const focusSearch = () => { setMobileView('list'); setFocusSearchTrigger((n) => n + 1); };
+
+  const paletteCommands = useMemo<PaletteCommand[]>(() => [
+    { id: 'new-note',      label: 'New Note',        description: 'Create a new note',                   shortcut: ['Ctrl', 'N'], icon: <Plus size={14} />,     action: handleCreate },
+    { id: 'focus-search',  label: 'Focus Search',    description: 'Jump to the note search field',       shortcut: ['Ctrl', '/'], icon: <Search size={14} />,   action: focusSearch },
+    { id: 'toggle-sidebar',label: 'Toggle Sidebar',  description: 'Switch between list and editor views', shortcut: ['Ctrl', 'B'], icon: <PanelLeft size={14} />, action: () => setMobileView((v) => v === 'list' ? 'editor' : 'list') },
+    { id: 'settings',      label: 'Open Settings',   description: 'Open the settings panel',             shortcut: ['Ctrl', ','], icon: <Settings size={14} />, action: () => setSettingsOpen(true) },
+  ], []);  // eslint-disable-line react-hooks/exhaustive-deps
+
+  useKeyboardShortcuts(useMemo(() => [
+    { key: 'n', ctrl: true, handler: handleCreate },
+    { key: 'k', ctrl: true, handler: () => setPaletteOpen(true) },
+    { key: ',', ctrl: true, handler: () => setSettingsOpen(true) },
+    { key: '/', ctrl: true, handler: focusSearch },
+    { key: 'b', ctrl: true, handler: () => setMobileView((v) => v === 'list' ? 'editor' : 'list') },
+  ], []));  // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={`flex flex-col h-full overflow-hidden ${!isLiquidGlass ? 'bg-base-200' : ''}`}>
@@ -74,6 +95,7 @@ export default function App() {
           search={search}
           mobileView={mobileView}
           theme={settings.theme}
+          focusSearchTrigger={focusSearchTrigger}
           onSearchChange={setSearch}
           onSelect={handleNoteSelect}
           onCreate={handleCreate}
@@ -128,7 +150,7 @@ export default function App() {
       ) : isHacker ? (
         <nav
           className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex"
-          style={{ background: '#050505', borderTop: '1px solid #003300', fontFamily: '"Courier New", monospace' }}
+          style={{ background: '#0d0c0c', borderTop: '1px solid #393836', fontFamily: '"Courier New", monospace' }}
         >
           {([
             { label: '[ls]', view: 'list' as const },
@@ -137,7 +159,7 @@ export default function App() {
             <button
               key={view}
               className="flex-1 py-3 text-[12px] font-bold transition-colors"
-              style={{ color: mobileView === view ? '#00ff41' : '#004400' }}
+              style={{ color: mobileView === view ? '#87a987' : '#625e5a' }}
               onClick={() => setMobileView(view)}
             >
               {label}
@@ -145,7 +167,7 @@ export default function App() {
           ))}
           <button
             className="flex-1 py-3 text-[12px] transition-colors"
-            style={{ color: '#004400' }}
+            style={{ color: '#625e5a' }}
             onClick={() => setSettingsOpen(true)}
           >
             [cfg]
@@ -176,6 +198,11 @@ export default function App() {
         </nav>
       )}
 
+      <CommandPalette
+        open={paletteOpen}
+        commands={paletteCommands}
+        onClose={() => setPaletteOpen(false)}
+      />
       <SettingsModal
         open={settingsOpen} notes={notes} theme={settings.theme}
         editorMode={settings.editorMode} magicFeatures={settings.magicFeatures}

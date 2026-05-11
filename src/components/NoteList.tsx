@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Plus, Search, Settings, FileText } from 'lucide-react';
 import type { Note } from '../types/note';
 import type { AppTheme } from '../hooks/useSettings';
@@ -9,6 +10,7 @@ interface NoteListProps {
   search: string;
   mobileView: 'list' | 'editor';
   theme: AppTheme;
+  focusSearchTrigger?: number;
   onSearchChange: (q: string) => void;
   onSelect: (id: string) => void;
   onCreate: () => void;
@@ -18,9 +20,14 @@ interface NoteListProps {
 }
 
 export function NoteList({
-  notes, activeNoteId, search, mobileView, theme,
+  notes, activeNoteId, search, mobileView, theme, focusSearchTrigger,
   onSearchChange, onSelect, onCreate, onDelete, onTogglePin, onOpenSettings,
 }: NoteListProps) {
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (focusSearchTrigger) searchRef.current?.focus();
+  }, [focusSearchTrigger]);
   const pinnedNotes = notes.filter((n) => n.pinned);
   const unpinnedNotes = notes.filter((n) => !n.pinned);
   const isWin96 = theme === 'win96';
@@ -44,10 +51,10 @@ export function NoteList({
       return (
         <div className="px-3 py-6" style={{ fontFamily: '"Courier New", monospace' }}>
           <div className="text-[11px] space-y-0.5" style={{ color: '#004400' }}>
-            <div style={{ color: '#00ff41' }}>$ ls vault/</div>
+            <div style={{ color: '#87a987' }}>$ ls vault/</div>
             <div>total 0</div>
             <div>{search ? 'no match found' : '(empty vault)'}</div>
-            {!search && <div style={{ color: '#00cc33' }}>touch new.md to start</div>}
+            {!search && <div style={{ color: '#c5c9c5' }}>touch new.md to start</div>}
           </div>
         </div>
       );
@@ -102,6 +109,7 @@ export function NoteList({
             <div className="flex items-center bg-white h-[18px]" style={{ border: '2px inset #808080' }}>
               <span className="px-1 text-[10px]" style={{ color: '#808080' }}>🔍</span>
               <input
+                ref={searchRef}
                 type="text"
                 className="flex-1 bg-transparent text-[11px] outline-none pr-1"
                 style={{ fontFamily: 'Tahoma' }}
@@ -119,40 +127,41 @@ export function NoteList({
         <>
           <div
             className="shrink-0 px-3 pt-3 pb-2 border-b"
-            style={{ borderBottomColor: '#003300', fontFamily: '"Courier New", monospace' }}
+            style={{ borderBottomColor: '#393836', fontFamily: '"Courier New", monospace' }}
           >
-            <pre className="text-[9px] leading-[1.4] select-none" style={{ color: '#00ff41' }}>
+            <pre className="text-[9px] leading-[1.4] select-none" style={{ color: '#87a987' }}>
 {`┌────────────────────┐
 │   FASTNOTE  v1.0   │
 └────────────────────┘`}
             </pre>
-            <div className="text-[11px] mt-2" style={{ color: '#00cc33' }}>
+            <div className="text-[11px] mt-2" style={{ color: '#c5c9c5' }}>
               {'$ ls vault/ '}
-              <span style={{ color: '#00ff41' }}>({notes.length} files)</span>
+              <span style={{ color: '#87a987' }}>({notes.length} files)</span>
             </div>
             <div className="flex items-center gap-3 mt-1.5 text-[11px]" style={{ fontFamily: '"Courier New", monospace' }}>
-              <button className="hover:underline" style={{ color: '#00ff41' }} onClick={onCreate}>
+              <button className="hover:underline" style={{ color: '#87a987' }} onClick={onCreate}>
                 $ touch new.md
               </button>
-              <button className="ml-auto" style={{ color: '#008811' }} onClick={onOpenSettings}>
+              <button className="ml-auto" style={{ color: '#7a8382' }} onClick={onOpenSettings}>
                 [config]
               </button>
             </div>
           </div>
           <div
             className="shrink-0 flex items-center gap-1 px-3 py-1.5 border-b"
-            style={{ borderBottomColor: '#003300', fontFamily: '"Courier New", monospace' }}
+            style={{ borderBottomColor: '#393836', fontFamily: '"Courier New", monospace' }}
           >
-            <span className="text-[11px] shrink-0" style={{ color: '#008811' }}>{'grep -i "'}</span>
+            <span className="text-[11px] shrink-0" style={{ color: '#7a8382' }}>{'grep -i "'}</span>
             <input
+              ref={searchRef}
               type="text"
               className="flex-1 bg-transparent text-[11px] outline-none min-w-0"
-              style={{ color: '#00ff41', fontFamily: '"Courier New", monospace' }}
+              style={{ color: '#87a987', fontFamily: '"Courier New", monospace' }}
               placeholder="pattern"
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
             />
-            <span className="text-[11px] shrink-0" style={{ color: '#008811' }}>{'"'}</span>
+            <span className="text-[11px] shrink-0" style={{ color: '#7a8382' }}>{'"'}</span>
           </div>
         </>
       )}
@@ -186,6 +195,7 @@ export function NoteList({
             <div className="relative">
               <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-base-content/25" />
               <input
+                ref={searchRef}
                 type="text"
                 className="w-full pl-8 pr-3 h-8 text-[13px] bg-base-200/40 border border-transparent focus:border-base-300/60 focus:bg-base-100 rounded-lg outline-none transition-all placeholder:text-base-content/25"
                 placeholder="Search notes..."
