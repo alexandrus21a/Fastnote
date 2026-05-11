@@ -34,7 +34,7 @@ export function NoteItem({ note, active, theme, onSelect, onDelete, onTogglePin 
         <span className="flex-1 min-w-0 truncate font-medium">{note.title || t('untitledNote')}</span>
         {note.pinned && <span className="text-[10px] shrink-0" style={{ color: active ? 'rgba(255,255,255,0.7)' : '#808080' }}>📌</span>}
         <span className="text-[10px] shrink-0" style={{ color: active ? 'rgba(255,255,255,0.6)' : '#808080' }}>{date}</span>
-        <div className="flex gap-px shrink-0 opacity-0 group-hover:opacity-100" onClick={(e) => e.stopPropagation()}>
+        <div className="flex gap-px shrink-0 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
           <button
             className="w-[14px] h-[14px] text-[9px] flex items-center justify-center"
             style={{ background: '#c0c0c0', border: '1px outset #dfdfdf', color: '#000' }}
@@ -81,14 +81,14 @@ export function NoteItem({ note, active, theme, onSelect, onDelete, onTogglePin 
           <span style={{ color: '#003300', fontSize: 10 }} className="shrink-0">{iso}</span>
         </div>
         <div
-          className="hidden group-hover:flex items-center gap-3 pb-[4px] pl-4 text-[10px]"
+          className="flex lg:hidden lg:group-hover:flex items-center gap-3 pb-[4px] pl-4 text-[10px]"
           style={{ fontFamily: '"Courier New", monospace' }}
           onClick={(e) => e.stopPropagation()}
         >
           <button onClick={() => onTogglePin(note.id)} className="hover:underline" style={{ color: '#008811' }}>
             {note.pinned ? '[unpin]' : '[pin]'}
           </button>
-          <button onClick={() => onDelete(note.id)} className="hover:underline" style={{ color: '#660000' }}>
+          <button onClick={() => onDelete(note.id)} className="hover:underline" style={{ color: '#cc4444' }}>
             [rm -f]
           </button>
         </div>
@@ -97,7 +97,17 @@ export function NoteItem({ note, active, theme, onSelect, onDelete, onTogglePin 
   }
 
   // ── DEFAULT ────────────────────────────────────────────────────────────────
+  const isLiquidGlass = theme === 'liquid-glass';
   const date = new Date(note.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+  const pinBtnClass = isLiquidGlass
+    ? `inline-flex items-center justify-center w-6 h-6 rounded-md transition-colors text-slate-500/70 hover:text-blue-500 hover:bg-white/40`
+    : `inline-flex items-center justify-center w-6 h-6 rounded-md transition-colors ${active ? 'hover:bg-base-300/60 text-base-content/50' : 'hover:bg-base-300/50 text-base-content/30'}`;
+
+  const deleteBtnClass = isLiquidGlass
+    ? `inline-flex items-center justify-center w-6 h-6 rounded-md transition-colors text-slate-500/70 hover:text-red-500 hover:bg-red-500/10`
+    : `inline-flex items-center justify-center w-6 h-6 rounded-md transition-colors ${active ? 'hover:bg-error/10 text-base-content/50 hover:text-error' : 'hover:bg-error/10 text-base-content/30 hover:text-error'}`;
+
   return (
     <div
       className={`group relative cursor-pointer transition-colors duration-150 ${active ? 'bg-base-200/60' : 'hover:bg-base-200/40'}`}
@@ -116,14 +126,14 @@ export function NoteItem({ note, active, theme, onSelect, onDelete, onTogglePin 
           </div>
           <div className="flex items-center gap-0.5 shrink-0 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
             <button
-              className={`inline-flex items-center justify-center w-6 h-6 rounded-md transition-colors ${active ? 'hover:bg-base-300/60 text-base-content/50' : 'hover:bg-base-300/50 text-base-content/30'}`}
+              className={pinBtnClass}
               onClick={(e) => { e.stopPropagation(); onTogglePin(note.id); }}
               title={note.pinned ? t('unpin') : t('pin')}
             >
               <Pin size={11} fill={note.pinned ? 'currentColor' : 'none'} />
             </button>
             <button
-              className={`inline-flex items-center justify-center w-6 h-6 rounded-md transition-colors ${active ? 'hover:bg-error/10 text-base-content/50 hover:text-error' : 'hover:bg-error/10 text-base-content/30 hover:text-error'}`}
+              className={deleteBtnClass}
               onClick={(e) => { e.stopPropagation(); onDelete(note.id); }}
               title={t('delete')}
             >
