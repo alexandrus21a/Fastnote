@@ -446,107 +446,159 @@ body.theme-win96 ::-webkit-scrollbar-thumb {
 }
 
 /* ========== HACKER THEME ========== */
+/* ── HACKER — Kanagawa Dragon ────────────────────────────────────────────────
+   bg:        #0d0c0c  #12120f  #1d1c19  #282727
+   fg:        #c5c9c5  muted:#a6a69c  dim:#54546d
+   green:     #87a987   red:#c4746e   yellow:#c4b28a
+   blue:      #8ba4b0   teal:#8ea4a2  purple:#a292a3
+   border:    #282727   #393836
+   ─────────────────────────────────────────────────────────────────────────── */
 body.theme-hacker {
-  background: #050505;
-  color: #00ff41;
+  background: #0d0c0c;
+  color: #c5c9c5;
   font-family: 'Courier New', 'Lucida Console', monospace;
 }
 
 body.theme-hacker #root {
-  background: #0a0a0a;
+  background: #0d0c0c;
 }
 
 body.theme-hacker .text-base-content {
-  color: #00ff41 !important;
+  color: #c5c9c5 !important;
 }
 
+body.theme-hacker .text-base-content\/25,
 body.theme-hacker .text-base-content\/30,
+body.theme-hacker .text-base-content\/35 {
+  color: #54546d !important;
+}
+
 body.theme-hacker .text-base-content\/40,
-body.theme-hacker .text-base-content\/50,
+body.theme-hacker .text-base-content\/45,
+body.theme-hacker .text-base-content\/50 {
+  color: #a6a69c !important;
+}
+
 body.theme-hacker .text-base-content\/60,
 body.theme-hacker .text-base-content\/70,
-body.theme-hacker .text-base-content\/80 {
-  color: #00ff41 !important;
+body.theme-hacker .text-base-content\/80,
+body.theme-hacker .text-base-content\/85,
+body.theme-hacker .text-base-content\/90 {
+  color: #c5c9c5 !important;
+}
+
+body.theme-hacker .text-primary {
+  color: #87a987 !important;
 }
 
 body.theme-hacker .glass-panel,
 body.theme-hacker .glass-panel-strong {
-  background: rgba(0, 20, 0, 0.9);
-  border: 1px solid #00ff41;
+  background: #1d1c19;
+  border: 1px solid #282727;
   border-radius: 0;
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.15);
+  box-shadow: none;
 }
 
 body.theme-hacker .bg-base-100 {
-  background: rgba(0, 20, 0, 0.9) !important;
-  border-color: #00ff41 !important;
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.15);
+  background: #1d1c19 !important;
+  border-color: #282727 !important;
+  box-shadow: none;
 }
 
-body.theme-hacker .bg-base-200 {
-  background: #000000 !important;
+body.theme-hacker .bg-base-200,
+body.theme-hacker .bg-base-200\/30,
+body.theme-hacker .bg-base-200\/40,
+body.theme-hacker .bg-base-200\/50,
+body.theme-hacker .bg-base-200\/60 {
+  background: #12120f !important;
 }
 
 body.theme-hacker .bg-base-300 {
-  background: rgba(0, 40, 0, 0.8) !important;
-  border-color: #00cc33 !important;
+  background: #282727 !important;
+  border-color: #393836 !important;
 }
 
 body.theme-hacker .bg-primary {
-  background: #00ff41 !important;
-  color: #000 !important;
+  background: #87a987 !important;
+  color: #0d0c0c !important;
   text-shadow: none;
-  box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+  box-shadow: none;
+}
+
+body.theme-hacker .bg-primary\/8,
+body.theme-hacker .bg-primary\/10 {
+  background: rgba(135, 169, 135, 0.1) !important;
 }
 
 body.theme-hacker .text-primary-content {
-  color: #000 !important;
+  color: #0d0c0c !important;
+}
+
+body.theme-hacker .border-primary {
+  border-color: #87a987 !important;
 }
 
 body.theme-hacker .btn {
   background: transparent;
-  border: 1px solid #00ff41;
-  color: #00ff41;
+  border: 1px solid #393836;
+  color: #c5c9c5;
   border-radius: 0;
   font-family: monospace;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 0 5px rgba(0, 255, 65, 0.2);
+  letter-spacing: 0.5px;
+  box-shadow: none;
 }
 
 body.theme-hacker .btn:hover {
-  background: rgba(0, 255, 65, 0.15);
-  box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+  background: rgba(135, 169, 135, 0.1);
+  border-color: #87a987;
+  box-shadow: none;
 }
 
 body.theme-hacker .btn-primary {
-  background: #00ff41 !important;
-  color: #000 !important;
-  border-color: #00ff41 !important;
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+  background: #87a987 !important;
+  color: #0d0c0c !important;
+  border-color: #87a987 !important;
+  box-shadow: none;
+}
+
+body.theme-hacker .btn-outline {
+  border-color: #393836 !important;
+  color: #c5c9c5 !important;
 }
 
 body.theme-hacker .btn-ghost:hover {
-  background: rgba(0, 255, 65, 0.1) !important;
+  background: rgba(135, 169, 135, 0.1) !important;
 }
 
 body.theme-hacker .input,
 body.theme-hacker .textarea {
-  background: #000 !important;
-  border: 1px solid #00ff41 !important;
-  color: #00ff41 !important;
+  background: #12120f !important;
+  border: 1px solid #393836 !important;
+  color: #c5c9c5 !important;
   border-radius: 0;
   font-family: monospace;
-  box-shadow: inset 0 0 8px rgba(0, 255, 65, 0.1);
+  box-shadow: none;
+}
+
+body.theme-hacker .input:focus,
+body.theme-hacker .textarea:focus {
+  border-color: #87a987 !important;
+  outline: none;
 }
 
 body.theme-hacker .input::placeholder,
 body.theme-hacker .textarea::placeholder {
-  color: #008811;
+  color: #54546d;
 }
 
 body.theme-hacker aside {
-  border-right: 1px solid #00ff41;
+  border-right: 1px solid #282727;
+}
+
+body.theme-hacker .border-base-300\/40,
+body.theme-hacker .border-base-300\/30,
+body.theme-hacker .border-base-300\/20 {
+  border-color: #282727 !important;
 }
 
 body.theme-hacker .alert {
@@ -556,28 +608,38 @@ body.theme-hacker .alert {
 }
 
 body.theme-hacker .alert-info {
-  background: rgba(0, 50, 100, 0.3) !important;
-  border-color: #00aaff !important;
-  color: #00aaff !important;
+  background: rgba(139, 164, 176, 0.1) !important;
+  border-color: #8ba4b0 !important;
+  color: #8ba4b0 !important;
 }
 
-body.theme-hacker .alert-success {
-  background: rgba(0, 100, 0, 0.3) !important;
-  border-color: #00ff41 !important;
-  color: #00ff41 !important;
+body.theme-hacker .alert-success,
+body.theme-hacker .text-success {
+  background: rgba(135, 169, 135, 0.1) !important;
+  border-color: #87a987 !important;
+  color: #87a987 !important;
 }
 
-body.theme-hacker .alert-warning {
-  background: rgba(100, 80, 0, 0.3) !important;
-  border-color: #ffcc00 !important;
-  color: #ffcc00 !important;
+body.theme-hacker .alert-warning,
+body.theme-hacker .text-warning {
+  background: rgba(196, 178, 138, 0.1) !important;
+  border-color: #c4b28a !important;
+  color: #c4b28a !important;
 }
 
-body.theme-hacker .alert-error {
-  background: rgba(100, 0, 0, 0.3) !important;
-  border-color: #ff0044 !important;
-  color: #ff0044 !important;
+body.theme-hacker .alert-error,
+body.theme-hacker .text-error {
+  background: rgba(196, 116, 110, 0.1) !important;
+  border-color: #c4746e !important;
+  color: #c4746e !important;
 }
+
+body.theme-hacker .bg-success\/8  { background: rgba(135, 169, 135, 0.08) !important; }
+body.theme-hacker .bg-warning\/8  { background: rgba(196, 178, 138, 0.08) !important; }
+body.theme-hacker .bg-error\/8    { background: rgba(196, 116, 110, 0.08) !important; }
+body.theme-hacker .border-success\/20 { border-color: rgba(135, 169, 135, 0.2) !important; }
+body.theme-hacker .border-warning\/20 { border-color: rgba(196, 178, 138, 0.2) !important; }
+body.theme-hacker .border-error\/20   { border-color: rgba(196, 116, 110, 0.2) !important; }
 
 /* Hacker — zero out ALL rounded corners globally */
 body.theme-hacker [class*="rounded-"],
@@ -587,89 +649,81 @@ body.theme-hacker .btn-circle {
 }
 
 body.theme-hacker .markdown-preview {
-  color: #00ff41;
+  color: #c5c9c5;
 }
 
 body.theme-hacker .markdown-preview h1,
 body.theme-hacker .markdown-preview h2,
 body.theme-hacker .markdown-preview h3 {
-  color: #00ff41;
-  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  color: #87a987;
+  text-shadow: none;
 }
 
 body.theme-hacker .markdown-preview pre {
-  background: #001100;
-  border: 1px solid #00ff41;
+  background: #12120f;
+  border: 1px solid #282727;
   border-radius: 0;
-  box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.1);
+  box-shadow: none;
 }
 
 body.theme-hacker .markdown-preview code {
-  background: #001100;
-  color: #00ff41;
-  border: 1px solid #004400;
+  background: #12120f;
+  color: #c5c9c5;
+  border: 1px solid #282727;
 }
 
 body.theme-hacker .markdown-preview a {
-  color: #00ffff;
-  text-shadow: 0 0 5px rgba(0, 255, 255, 0.4);
+  color: #8ba4b0;
+  text-shadow: none;
 }
 
 body.theme-hacker .markdown-preview blockquote {
-  border-left-color: #00ff41;
-  color: #00cc33;
+  border-left-color: #393836;
+  color: #a6a69c;
 }
 
 body.theme-hacker .markdown-preview th {
-  background: rgba(0, 255, 65, 0.1);
+  background: rgba(135, 169, 135, 0.08);
 }
 
 body.theme-hacker .markdown-preview hr {
-  border-color: #004400;
+  border-color: #282727;
 }
 
 body.theme-hacker ::-webkit-scrollbar-track {
-  background: #001100;
+  background: #0d0c0c;
 }
 
 body.theme-hacker ::-webkit-scrollbar-thumb {
-  background: #004400;
-  border: 1px solid #00ff41;
+  background: #282727;
+  border: 1px solid #393836;
 }
 
 /* Hacker icon colors */
 body.theme-hacker svg {
-  color: #00ff41;
+  color: #87a987;
 }
 body.theme-hacker .bg-primary svg,
 body.theme-hacker .text-primary-content svg {
-  color: #000;
+  color: #0d0c0c;
 }
 body.theme-hacker .btn svg {
-  color: #00ff41;
+  color: #c5c9c5;
 }
 body.theme-hacker .btn-primary svg {
-  color: #000;
+  color: #0d0c0c;
 }
-body.theme-hacker .alert-info svg {
-  color: #00aaff;
-}
-body.theme-hacker .alert-success svg {
-  color: #00ff41;
-}
-body.theme-hacker .alert-warning svg {
-  color: #ffcc00;
-}
-body.theme-hacker .alert-error svg {
-  color: #ff0044;
-}
+body.theme-hacker .alert-info svg  { color: #8ba4b0; }
+body.theme-hacker .alert-success svg { color: #87a987; }
+body.theme-hacker .alert-warning svg { color: #c4b28a; }
+body.theme-hacker .alert-error svg   { color: #c4746e; }
 body.theme-hacker .text-base-content\/30 svg,
 body.theme-hacker .text-base-content\/40 svg,
 body.theme-hacker .text-base-content\/50 svg {
-  opacity: 0.7;
+  color: #a6a69c;
 }
 
-/* CRT scanline effect for hacker theme */
+/* CRT scanline effect */
 body.theme-hacker::after {
   content: '';
   position: fixed;
@@ -679,14 +733,14 @@ body.theme-hacker::after {
   height: 100vh;
   background: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.1),
-    rgba(0, 0, 0, 0.1) 1px,
+    rgba(0, 0, 0, 0.06),
+    rgba(0, 0, 0, 0.06) 1px,
     transparent 1px,
     transparent 2px
   );
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
 /* ========== MARKDOWN PREVIEW BASE ========== */

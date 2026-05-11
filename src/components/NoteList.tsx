@@ -50,7 +50,7 @@ export function NoteList({
     if (isHacker) {
       return (
         <div className="px-3 py-6" style={{ fontFamily: '"Courier New", monospace' }}>
-          <div className="text-[11px] space-y-0.5" style={{ color: '#004400' }}>
+          <div className="text-[11px] space-y-0.5" style={{ color: '#54546d' }}>
             <div style={{ color: '#87a987' }}>$ ls vault/</div>
             <div>total 0</div>
             <div>{search ? 'no match found' : '(empty vault)'}</div>

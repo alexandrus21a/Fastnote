@@ -230,10 +230,10 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
     const emptyContent = () => {
       if (isHacker) return (
         <div style={{ fontFamily: '"Courier New", monospace' }}>
-          <div className="text-[11px] space-y-1" style={{ color: '#00cc33' }}>
-            <div style={{ color: '#00ff41' }}>$ vim _</div>
+          <div className="text-[11px] space-y-1" style={{ color: '#a6a69c' }}>
+            <div style={{ color: '#87a987' }}>$ vim _</div>
             <div>No buffer loaded.</div>
-            <div style={{ color: '#008811' }}>Select a file or touch new.md</div>
+            <div style={{ color: '#54546d' }}>Select a file or touch new.md</div>
           </div>
         </div>
       );
@@ -315,13 +315,13 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
       return (
         <div
           className="shrink-0 flex items-center gap-2 px-3 py-1.5 border-b"
-          style={{ borderBottomColor: '#003300', fontFamily: '"Courier New", monospace' }}
+          style={{ borderBottomColor: '#282727', fontFamily: '"Courier New", monospace' }}
         >
-          <span className="text-[11px] shrink-0" style={{ color: '#008811' }}>vim</span>
+          <span className="text-[11px] shrink-0" style={{ color: '#54546d' }}>vim</span>
           <input
             type="text"
             className="flex-1 min-w-0 bg-transparent text-[13px] outline-none"
-            style={{ color: '#00ff41', fontFamily: '"Courier New", monospace' }}
+            style={{ color: '#c5c9c5', fontFamily: '"Courier New", monospace' }}
             placeholder="untitled.md"
             value={note.title}
             onChange={(e) => onUpdate(note.id, { title: e.target.value })}
@@ -392,14 +392,14 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
       {searchOpen && !isSimple && (
         <div
           className="shrink-0 px-5 py-2 border-b border-base-300/20 flex items-center gap-2"
-          style={isHacker ? { borderBottomColor: '#003300', fontFamily: '"Courier New", monospace' } : {}}
+          style={isHacker ? { borderBottomColor: '#282727', fontFamily: '"Courier New", monospace' } : {}}
         >
-          <Search size={14} className="text-base-content/30" style={isHacker ? { color: '#008811' } : {}} />
+          <Search size={14} className="text-base-content/30" style={isHacker ? { color: '#54546d' } : {}} />
           <input
             ref={searchInputRef}
             type="text"
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-base-content/25 h-7"
-            style={isHacker ? { color: '#00ff41', fontFamily: '"Courier New", monospace' } : {}}
+            style={isHacker ? { color: '#c5c9c5', fontFamily: '"Courier New", monospace' } : {}}
             placeholder="Find in note..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -439,7 +439,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
       {!isWin96 && !isSimple && (
         <div
           className="shrink-0 px-5 py-1.5 border-b border-base-300/20 flex items-center gap-0.5 overflow-x-auto"
-          style={isHacker ? { borderBottomColor: '#003300' } : {}}
+          style={isHacker ? { borderBottomColor: '#282727' } : {}}
         >
           {toolbarActions.map((tb) => (
             <button
@@ -465,7 +465,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
             className="flex-1 w-full resize-none outline-none bg-transparent p-5 leading-[1.75]"
             style={
               isWin96 ? { fontFamily: 'Tahoma', fontSize: 13, color: '#000', background: 'white' }
-              : isHacker ? { fontFamily: '"Courier New", monospace', fontSize: 13, color: '#00ff41', caretColor: '#00ff41' }
+              : isHacker ? { fontFamily: '"Courier New", monospace', fontSize: 13, color: '#c5c9c5', caretColor: '#87a987' }
               : { fontSize: 15, color: 'var(--color-base-content)' }
             }
             placeholder={isSimple ? (t('startWritingSimple') || 'Start writing...') : isHacker ? '-- INSERT --' : t('startWriting')}
@@ -551,7 +551,7 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
       {!isSimple && !isWin96 && (
         <div
           className="shrink-0 border-t border-base-300/20 p-2 flex justify-center lg:hidden"
-          style={isHacker ? { borderTopColor: '#003300' } : {}}
+          style={isHacker ? { borderTopColor: '#282727' } : {}}
         >
           <button
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-base-200 text-sm text-base-content/60 transition-colors"
@@ -596,11 +596,11 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
       {isHacker && (
         <div
           className="shrink-0 flex items-center px-3 h-[22px] text-[11px]"
-          style={{ background: '#0a0a0a', borderTop: '1px solid #003300', fontFamily: '"Courier New", monospace' }}
+          style={{ background: '#0d0c0c', borderTop: '1px solid #282727', fontFamily: '"Courier New", monospace' }}
         >
-          <span className="px-1.5 mr-2 text-[10px] font-bold" style={{ background: '#00ff41', color: '#000' }}>INSERT</span>
-          <span className="flex-1 min-w-0 truncate" style={{ color: '#00cc33' }}>{noteFilename}.md</span>
-          <span style={{ color: '#008811' }}>:{cursorLine}:{cursorCol}</span>
+          <span className="px-1.5 mr-2 text-[10px] font-bold" style={{ background: '#87a987', color: '#0d0c0c' }}>INSERT</span>
+          <span className="flex-1 min-w-0 truncate" style={{ color: '#c5c9c5' }}>{noteFilename}.md</span>
+          <span style={{ color: '#54546d' }}>:{cursorLine}:{cursorCol}</span>
         </div>
       )}
     </div>

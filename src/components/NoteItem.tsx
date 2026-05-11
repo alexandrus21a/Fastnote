@@ -64,31 +64,31 @@ export function NoteItem({ note, active, theme, onSelect, onDelete, onTogglePin 
       <div
         className="cursor-pointer group px-3"
         style={{
-          background: active ? 'rgba(0,255,65,0.07)' : 'transparent',
-          borderBottom: '1px solid #001800',
+          background: active ? 'rgba(135,169,135,0.08)' : 'transparent',
+          borderBottom: '1px solid #1d1c19',
         }}
         onClick={() => onSelect(note.id)}
       >
         <div className="flex items-center gap-1.5 py-[5px] text-[11px]" style={{ fontFamily: '"Courier New", monospace' }}>
-          <span className="shrink-0 w-[10px]" style={{ color: active ? '#00ff41' : '#004400' }}>
+          <span className="shrink-0 w-[10px]" style={{ color: active ? '#87a987' : '#393836' }}>
             {active ? '▶' : ' '}
           </span>
-          <span className="flex-1 min-w-0 truncate" style={{ color: active ? '#00ff41' : '#00cc33' }}>
-            {filename}<span style={{ color: '#004400' }}>.md</span>
+          <span className="flex-1 min-w-0 truncate" style={{ color: active ? '#87a987' : '#c5c9c5' }}>
+            {filename}<span style={{ color: '#54546d' }}>.md</span>
           </span>
-          {note.pinned && <span style={{ color: '#006600', fontSize: 10 }}>[pin]</span>}
-          <span style={{ color: '#004400', fontSize: 10 }} className="shrink-0">{sizeStr}</span>
-          <span style={{ color: '#003300', fontSize: 10 }} className="shrink-0">{iso}</span>
+          {note.pinned && <span style={{ color: '#a6a69c', fontSize: 10 }}>[pin]</span>}
+          <span style={{ color: '#54546d', fontSize: 10 }} className="shrink-0">{sizeStr}</span>
+          <span style={{ color: '#393836', fontSize: 10 }} className="shrink-0">{iso}</span>
         </div>
         <div
           className="flex lg:hidden lg:group-hover:flex items-center gap-3 pb-[4px] pl-4 text-[10px]"
           style={{ fontFamily: '"Courier New", monospace' }}
           onClick={(e) => e.stopPropagation()}
         >
-          <button onClick={() => onTogglePin(note.id)} className="hover:underline" style={{ color: '#008811' }}>
+          <button onClick={() => onTogglePin(note.id)} className="hover:underline" style={{ color: '#87a987' }}>
             {note.pinned ? '[unpin]' : '[pin]'}
           </button>
-          <button onClick={() => onDelete(note.id)} className="hover:underline" style={{ color: '#cc4444' }}>
+          <button onClick={() => onDelete(note.id)} className="hover:underline" style={{ color: '#c4746e' }}>
             [rm -f]
           </button>
         </div>
