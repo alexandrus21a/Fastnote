@@ -298,6 +298,14 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
                 title="Find"
               >🔍</button>
             )}
+            {!isSimple && (
+              <button
+                className="w-[19px] h-[19px] text-[10px] flex items-center justify-center"
+                style={{ background: '#c0c0c0', border: '1.5px outset #dfdfdf' }}
+                onClick={() => setShowPreview((p) => !p)}
+                title={showPreview ? 'Edit' : 'Preview'}
+              >{showPreview ? '✏️' : '👁'}</button>
+            )}
             {exportMenu}
           </div>
         </div>
@@ -551,6 +559,21 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
           >
             {showPreview ? <EyeOff size={14} /> : <Eye size={14} />}
             {showPreview ? t('edit') : t('preview')}
+          </button>
+        </div>
+      )}
+      {/* Win96 mobile preview toggle */}
+      {!isSimple && isWin96 && (
+        <div
+          className="shrink-0 flex justify-center py-1 border-t lg:hidden"
+          style={{ background: '#c0c0c0', borderTopColor: '#808080', fontFamily: 'Tahoma' }}
+        >
+          <button
+            className="px-4 py-0.5 text-[11px]"
+            style={{ background: '#c0c0c0', border: '1.5px outset #dfdfdf', color: '#000' }}
+            onClick={() => setShowPreview((p) => !p)}
+          >
+            {showPreview ? '✏ Edit' : '👁 Preview'}
           </button>
         </div>
       )}

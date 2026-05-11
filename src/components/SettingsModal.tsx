@@ -98,10 +98,13 @@ function HackerPreview() {
   return (
     <div className="h-full rounded-lg overflow-hidden bg-[#0d0c0c] relative p-2" style={{ fontFamily: '"Courier New", monospace' }}>
       <div className="text-[9px] leading-[1.5] space-y-px">
-        <div style={{ color: '#87a987' }}>$ fastnote --start</div>
-        <div style={{ color: '#00cc33' }}>{'>'} <span style={{ color: '#87a987' }}>notes loaded</span></div>
-        <div style={{ color: '#87a987' }}>$ 12*8=<span style={{ fontWeight: 700 }}> 96</span></div>
-        <div style={{ color: '#008811' }}>_<span className="animate-pulse">█</span></div>
+        <div style={{ color: '#c5c9c5' }}>vim <span style={{ color: '#87a987' }}>note.md</span></div>
+        <div style={{ color: '#87a987' }}>{'-- INSERT --'}</div>
+        <div style={{ color: '#c5c9c5' }}>12*8=<span style={{ color: '#87a987', fontWeight: 700 }}>96</span></div>
+        <div className="flex items-center gap-1">
+          <span className="px-1 text-[8px] font-bold" style={{ background: '#87a987', color: '#0d0c0c' }}>INSERT</span>
+          <span style={{ color: '#87a987' }}>note.md</span>
+        </div>
       </div>
       <div className="absolute inset-0 pointer-events-none opacity-25" style={{ background: 'repeating-linear-gradient(0deg,rgba(0,0,0,.15),rgba(0,0,0,.15) 1px,transparent 1px,transparent 2px)' }} />
     </div>
@@ -118,7 +121,7 @@ interface CustomThemeDef {
 const CUSTOM_THEMES: CustomThemeDef[] = [
   { value: 'liquid-glass', label: 'Liquid Glass', description: 'Frosted glass, soft gradients', preview: <LiquidGlassPreview /> },
   { value: 'win96', label: 'Win 96', description: 'Windows 95/96 retro', preview: <Win96Preview /> },
-  { value: 'hacker', label: 'Hacker', description: 'Terminal, CRT scanlines', preview: <HackerPreview /> },
+  { value: 'hacker', label: 'Hacker', description: 'Kanagawa Dragon · terminal, CRT scanlines', preview: <HackerPreview /> },
 ];
 
 export function SettingsModal({
