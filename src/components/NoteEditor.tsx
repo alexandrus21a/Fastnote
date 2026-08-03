@@ -25,7 +25,7 @@ interface NoteEditorProps {
   magicFeatures: boolean;
   mobileView: 'list' | 'editor';
   theme: AppTheme;
-  onUpdate: (id: string, updates: Partial<Pick<Note, 'title' | 'content'>>) => void;
+  onUpdate: (id: string, updates: Partial<Omit<Note, 'id' | 'createdAt' | 'updatedAt'>>) => void;
   onCreate: () => void;
 }
 
@@ -354,34 +354,59 @@ export function NoteEditor({ note, editorMode, magicFeatures, mobileView, theme,
     }
     // Default
     return (
-      <div className="shrink-0 flex items-center gap-2 px-5 pt-4 pb-2">
-        <input
-          type="text"
-          className="flex-1 bg-transparent text-xl font-semibold tracking-tight outline-none placeholder:text-base-content/20 text-base-content/90 py-1"
-          placeholder={t('noteTitle')}
-          value={note.title}
-          onChange={(e) => onUpdate(note.id, { title: e.target.value })}
-        />
-        <div className="flex items-center gap-0.5">
-          {!isSimple && (
-            <>
-              <button
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
-                onClick={() => { setSearchOpen((s) => !s); setTimeout(() => searchInputRef.current?.focus(), 50); }}
-                title="Search in note"
-              ><Search size={15} /></button>
-              <button
-                className="hidden lg:inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
-                onClick={() => setShowPreview((p) => !p)}
-                title={showPreview ? t('edit') : t('preview')}
-              >{showPreview ? <EyeOff size={15} /> : <Eye size={15} />}</button>
-            </>
-          )}
-          {exportMenu}
+      <div className="shrink-0 flex flex-col px-5 pt-4 pb-2 border-b border-base-300/10">
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            className="flex-1 bg-transparent text-2xl font-bold tracking-tight outline-none placeholder:text-base-content/20 text-base-content/90 py-1"
+            placeholder={t('noteTitle')}
+            value={note.title}
+            onChange={(e) => onUpdate(note.id, { title: e.target.value })}
+          />
+          <div className="flex items-center gap-0.5">
+            {!isSimple && (
+              <>
+                <button
+                  className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
+                  onClick={() => { setSearchOpen((s) => !s); setTimeout(() => searchInputRef.current?.focus(), 50); }}
+                  title="Search in note"
+                ><Search size={15} /></button>
+                <button
+                  className="hidden lg:inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-base-200 transition-colors text-base-content/40"
+                  onClick={() => setShowPreview((p) => !p)}
+                  title={showPreview ? t('edit') : t('preview')}
+                >{showPreview ? <EyeOff size={15} /> : <Eye size={15} />}</button>
+              </>
+            )}
+            {exportMenu}
+          </div>
+        </div>
+
+        {/* Category & Tags metadata edit bar */}
+        <div className="flex items-center gap-2 mt-2">
+          <input
+            type="text"
+            className="text-[11px] font-medium px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 outline-none w-28 placeholder:text-primary/50"
+            placeholder="Folder / Category"
+            value={note.category || ''}
+            onChange={(e) => onUpdate(note.id, { category: e.target.value })}
+          />
+          <input
+            type="text"
+            className="flex-1 text-[11px] px-2 py-0.5 rounded bg-base-200/50 text-base-content/80 border border-transparent focus:border-base-300 outline-none placeholder:text-base-content/30"
+            placeholder="Tags (comma-separated, e.g. work, math, draft)"
+            value={note.tags ? note.tags.join(', ') : ''}
+            onChange={(e) => {
+              const raw = e.target.value;
+              const tagsArray = raw.split(',').map(s => s.trim()).filter(Boolean);
+              onUpdate(note.id, { tags: tagsArray });
+            }}
+          />
         </div>
       </div>
     );
   };
+
 
   return (
     <div className={outerClass}>

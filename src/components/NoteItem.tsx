@@ -110,17 +110,20 @@ export function NoteItem({ note, active, theme, onSelect, onDelete, onTogglePin 
 
   return (
     <div
-      className={`group relative cursor-pointer transition-colors duration-150 ${active ? 'bg-base-200/60' : 'hover:bg-base-200/40'}`}
+      className={`group relative cursor-pointer transition-all duration-200 border-l-2 ${
+        active 
+          ? (isLiquidGlass ? 'bg-white/60 shadow-sm border-blue-500' : 'bg-primary/10 border-primary') 
+          : 'border-transparent hover:bg-base-200/40 hover:border-base-300'
+      }`}
       onClick={() => onSelect(note.id)}
     >
-      {active && <div className="absolute left-0 top-2 bottom-2 w-0.5 bg-primary rounded-full" />}
-      <div className="px-4 py-2.5">
+      <div className="px-3.5 py-2.5">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-1.5 min-w-0">
             {note.pinned && (
-              <Pin size={10} className={`shrink-0 mt-1 ${active ? 'text-primary' : 'text-base-content/30'}`} fill="currentColor" />
+              <Pin size={11} className={`shrink-0 ${active ? 'text-primary' : 'text-base-content/40'}`} fill="currentColor" />
             )}
-            <span className={`text-sm truncate font-medium ${active ? 'text-base-content' : 'text-base-content/80'}`}>
+            <span className={`text-sm truncate font-semibold ${active ? 'text-primary' : 'text-base-content/90'}`}>
               {note.title || t('untitledNote')}
             </span>
           </div>
@@ -141,13 +144,30 @@ export function NoteItem({ note, active, theme, onSelect, onDelete, onTogglePin 
             </button>
           </div>
         </div>
-        <p className={`text-[13px] truncate leading-relaxed mt-0.5 ${active ? 'text-base-content/50' : 'text-base-content/35'}`}>
+        
+        <p className={`text-[12.5px] truncate leading-relaxed mt-1 ${active ? 'text-base-content/70' : 'text-base-content/45'}`}>
           {note.content.slice(0, 90).replace(/\n/g, ' ') || t('noContent')}
         </p>
-        <span className={`text-[11px] font-mono mt-1 block ${active ? 'text-base-content/30' : 'text-base-content/25'}`}>
-          {date}
-        </span>
+
+        <div className="flex items-center justify-between gap-2 mt-2">
+          <div className="flex items-center gap-1 min-w-0 flex-wrap overflow-hidden max-h-5">
+            {note.category && (
+              <span className="inline-flex items-center px-1.5 py-0.2 text-[10px] font-medium rounded bg-primary/10 text-primary uppercase tracking-wider">
+                {note.category}
+              </span>
+            )}
+            {note.tags && note.tags.slice(0, 2).map((tag) => (
+              <span key={tag} className="inline-flex items-center px-1.5 py-0.2 text-[10px] rounded bg-base-300/50 text-base-content/60">
+                #{tag}
+              </span>
+            ))}
+          </div>
+          <span className={`text-[10px] font-mono shrink-0 ${active ? 'text-base-content/40' : 'text-base-content/30'}`}>
+            {date}
+          </span>
+        </div>
       </div>
     </div>
   );
 }
+

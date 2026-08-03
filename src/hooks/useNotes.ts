@@ -56,7 +56,7 @@ export function useNotes() {
   }, [notes, persist]);
 
   const updateNote = useCallback(
-    (id: string, updates: Partial<Pick<Note, 'title' | 'content'>>) => {
+    (id: string, updates: Partial<Omit<Note, 'id' | 'createdAt' | 'updatedAt'>>) => {
       const next = notes.map((n) =>
         n.id === id
           ? { ...n, ...updates, updatedAt: Date.now() }

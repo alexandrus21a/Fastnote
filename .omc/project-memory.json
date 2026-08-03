@@ -1,0 +1,279 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1780622891257,
+  "projectRoot": "/home/ubuntu/projects/Fastnote",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "19.2.5",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.5",
+        "category": "frontend"
+      },
+      {
+        "name": "vite",
+        "version": "8.0.10",
+        "category": "build"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build 2>&1 | tail -20",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "vite",
+      "build": "tsc -b && vite build",
+      "lint": "eslint .",
+      "preview": "vite preview"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "src"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 7,
+      "lastAccessed": 1780622891205,
+      "keyFiles": [
+        "favicon.svg",
+        "icons.svg",
+        "index.html",
+        "manifest.webmanifest",
+        "registerSW.js"
+      ]
+    },
+    "plans": {
+      "path": "plans",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780622891226,
+      "keyFiles": [
+        "desktop.md"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 2,
+      "lastAccessed": 1780622891231,
+      "keyFiles": [
+        "favicon.svg",
+        "icons.svg"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 3,
+      "lastAccessed": 1780622891233,
+      "keyFiles": [
+        "App.tsx",
+        "index.css",
+        "main.tsx"
+      ]
+    },
+    "dist/assets": {
+      "path": "dist/assets",
+      "purpose": "Static assets",
+      "fileCount": 5,
+      "lastAccessed": 1780622891239,
+      "keyFiles": [
+        "chunk-CilyBKbf.js",
+        "index-C1l_ZrlV.css",
+        "index-DRPHwlaG.js"
+      ]
+    },
+    "src/assets": {
+      "path": "src/assets",
+      "purpose": "Static assets",
+      "fileCount": 1,
+      "lastAccessed": 1780622891240,
+      "keyFiles": [
+        "vite.svg"
+      ]
+    },
+    "src/components": {
+      "path": "src/components",
+      "purpose": "UI components",
+      "fileCount": 7,
+      "lastAccessed": 1780622891241,
+      "keyFiles": [
+        "CommandPalette.tsx",
+        "ConfirmModal.tsx",
+        "ImportExportModal.tsx"
+      ]
+    },
+    "src/types": {
+      "path": "src/types",
+      "purpose": "Type definitions",
+      "fileCount": 1,
+      "lastAccessed": 1780622891241,
+      "keyFiles": [
+        "note.ts"
+      ]
+    },
+    "src/utils": {
+      "path": "src/utils",
+      "purpose": "Utility functions",
+      "fileCount": 5,
+      "lastAccessed": 1780622891241,
+      "keyFiles": [
+        "crypto.ts",
+        "currency.ts",
+        "math.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/components/NoteEditor.tsx",
+      "accessCount": 35,
+      "lastAccessed": 1780623367167,
+      "type": "file"
+    },
+    {
+      "path": "src/index.css",
+      "accessCount": 23,
+      "lastAccessed": 1780623355243,
+      "type": "file"
+    },
+    {
+      "path": "src/App.tsx",
+      "accessCount": 20,
+      "lastAccessed": 1780622961374,
+      "type": "file"
+    },
+    {
+      "path": "src/components/NoteItem.tsx",
+      "accessCount": 20,
+      "lastAccessed": 1780623486091,
+      "type": "file"
+    },
+    {
+      "path": "src/components/NoteList.tsx",
+      "accessCount": 19,
+      "lastAccessed": 1780623305198,
+      "type": "file"
+    },
+    {
+      "path": "src/components/SettingsModal.tsx",
+      "accessCount": 15,
+      "lastAccessed": 1778490637694,
+      "type": "file"
+    },
+    {
+      "path": "src/hooks/useSettings.ts",
+      "accessCount": 15,
+      "lastAccessed": 1780622972423,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 8,
+      "lastAccessed": 1780622952621,
+      "type": "file"
+    },
+    {
+      "path": "public/favicon.svg",
+      "accessCount": 3,
+      "lastAccessed": 1778490844370,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 3,
+      "lastAccessed": 1778491201892,
+      "type": "file"
+    },
+    {
+      "path": "src/i18n/locales/en.json",
+      "accessCount": 2,
+      "lastAccessed": 1778489058851,
+      "type": "file"
+    },
+    {
+      "path": "vite.config.ts",
+      "accessCount": 2,
+      "lastAccessed": 1778491202020,
+      "type": "file"
+    },
+    {
+      "path": "src/types/note.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778445075160,
+      "type": "file"
+    },
+    {
+      "path": "src/utils/math.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778446431811,
+      "type": "file"
+    },
+    {
+      "path": "src/hooks/useKeyboardShortcuts.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778489141983,
+      "type": "file"
+    },
+    {
+      "path": "src/components/CommandPalette.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1778489158297,
+      "type": "file"
+    },
+    {
+      "path": "index.html",
+      "accessCount": 1,
+      "lastAccessed": 1778491202280,
+      "type": "file"
+    },
+    {
+      "path": "src/main.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1778491204205,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

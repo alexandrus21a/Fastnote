@@ -5,18 +5,18 @@
 
 /* ========== CUSTOM LIGHT THEME OVERRIDES ========== */
 [data-theme="light"] {
-  --color-base-100: oklch(100% 0 0);
-  --color-base-200: oklch(96.7% 0.003 264);
-  --color-base-300: oklch(92.2% 0.006 264);
-  --color-base-content: oklch(21.5% 0.012 264);
-  --color-primary: oklch(55.5% 0.163 18.5);
-  --color-primary-content: oklch(98.5% 0.001 17);
+  --color-base-100: oklch(98.8% 0.005 70);
+  --color-base-200: oklch(96.2% 0.008 70);
+  --color-base-300: oklch(92.5% 0.010 70);
+  --color-base-content: oklch(18% 0.016 260);
+  --color-primary: oklch(54% 0.175 22);
+  --color-primary-content: oklch(99% 0.002 70);
   --color-secondary: oklch(55.2% 0.016 248);
   --color-secondary-content: oklch(98.4% 0.009 248);
   --color-accent: oklch(59.6% 0.145 163);
   --color-accent-content: oklch(97.5% 0.011 166);
   --color-neutral: oklch(27.4% 0.006 286);
-  --color-neutral-content: oklch(98.7% 0 0);
+  --color-neutral-content: oklch(98.7% 0.002 70);
   --color-info: oklch(68.3% 0.148 237);
   --color-info-content: oklch(98.6% 0.007 243);
   --color-success: oklch(62.7% 0.165 149);
@@ -29,12 +29,12 @@
 
 /* ========== CUSTOM DARK THEME OVERRIDES ========== */
 [data-theme="dark"] {
-  --color-base-100: oklch(21.5% 0.012 264);
-  --color-base-200: oklch(17.8% 0.009 264);
-  --color-base-300: oklch(15.2% 0.007 264);
-  --color-base-content: oklch(94.1% 0.005 286);
-  --color-primary: oklch(60.2% 0.177 18.5);
-  --color-primary-content: oklch(26.8% 0.043 23);
+  --color-base-100: oklch(20% 0.018 265);
+  --color-base-200: oklch(16.5% 0.014 265);
+  --color-base-300: oklch(14% 0.012 265);
+  --color-base-content: oklch(91% 0.008 75);
+  --color-primary: oklch(66% 0.20 22);
+  --color-primary-content: oklch(12% 0.020 265);
   --color-secondary: oklch(63.7% 0.017 248);
   --color-secondary-content: oklch(11.2% 0.018 248);
   --color-accent: oklch(64.6% 0.155 163);
@@ -49,6 +49,44 @@
   --color-warning-content: oklch(26.8% 0.043 64);
   --color-error: oklch(57.7% 0.245 27.3);
   --color-error-content: oklch(97.5% 0.013 23);
+}
+
+/* ========== CUSTOM PINK (CUPCAKE) THEME OVERRIDES ========== */
+[data-theme="cupcake"] {
+  --color-base-100: oklch(97.5% 0.010 10);
+  --color-base-200: oklch(94%   0.018 10);
+  --color-base-300: oklch(89%   0.025 10);
+  --color-base-content: oklch(25% 0.022 10);
+  --color-primary: oklch(56% 0.22 340);
+  --color-primary-content: oklch(99% 0.003 10);
+  --color-secondary: oklch(72% 0.12 200);
+  --color-secondary-content: oklch(99% 0.003 200);
+  --color-accent: oklch(78% 0.14 55);
+  --color-accent-content: oklch(25% 0.022 55);
+}
+
+/* ========== CUSTOM FOREST THEME OVERRIDES ========== */
+[data-theme="forest"] {
+  --color-base-100: oklch(17%   0.038 150);
+  --color-base-200: oklch(14%   0.030 150);
+  --color-base-300: oklch(11.5% 0.024 150);
+  --color-base-content: oklch(88% 0.030 130);
+  --color-primary: oklch(62% 0.23 145);
+  --color-primary-content: oklch(10% 0.025 150);
+  --color-secondary: oklch(58% 0.15 175);
+  --color-secondary-content: oklch(10% 0.020 175);
+}
+
+/* ========== CUSTOM LUXURY THEME OVERRIDES ========== */
+[data-theme="luxury"] {
+  --color-base-100: oklch(10.5% 0.008 280);
+  --color-base-200: oklch(8.5%  0.006 280);
+  --color-base-300: oklch(6.5%  0.004 280);
+  --color-base-content: oklch(93% 0.006 75);
+  --color-primary: oklch(72% 0.16 80);
+  --color-primary-content: oklch(10% 0.010 280);
+  --color-secondary: oklch(65% 0.12 45);
+  --color-secondary-content: oklch(10% 0.010 280);
 }
 
 html, body, #root {
@@ -123,12 +161,18 @@ body {
 
 /* ========== LIQUID GLASS THEME ========== */
 body.theme-liquid-glass {
-  background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 40%, #e2e8f0 100%);
+  background: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+              radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
+              radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
+              radial-gradient(at 0% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+              linear-gradient(145deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  background-attachment: fixed;
 }
 
 body.theme-liquid-glass #root {
   background: transparent;
 }
+
 
 body.theme-liquid-glass .glass-panel {
   background: rgba(255, 255, 255, 0.55);

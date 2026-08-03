@@ -2,36 +2,41 @@
 
 # ⚡ Fastnote
 
-**No accounts. No sync. No server. Just fast, private notes.**
+### Next-Level Offline Note-Taking & Inline Workspace
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-fastnote--app.vercel.app-black?style=for-the-badge&logo=vercel)](https://fastnote-app.vercel.app)
+**Zero accounts. Zero cloud sync. Zero telemetry. 100% Private, Blazing Fast Notes.**
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-fastnote--app.vercel.app-000000?style=for-the-badge&logo=vercel)](https://fastnote-app.vercel.app)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
-[![PWA](https://img.shields.io/badge/PWA-offline--ready-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](#)
+[![PWA](https://img.shields.io/badge/PWA-Offline--Ready-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-[**Try it live →**](https://fastnote-app.vercel.app)
+[**Experience Fastnote Live →**](https://fastnote-app.vercel.app)
 
 </div>
 
 ---
 
-## ✨ Highlights
+## ✨ Features at a Glance
 
-- **Magic calculations** — type `100$ + 2€ =` or `15km to mi =` and the answer appears inline
-- **Markdown editor** with live preview, toolbar, and GFM support — or switch to plain Simple mode
-- **8 themes** — including Liquid Glass, Win 96, and Hacker that transform the entire UI
-- **Encrypted backups** — AES-GCM `.fastnote` files you decrypt with a passphrase
-- **Fully offline** — stores everything in `localStorage`, installs as a PWA, no server ever
+- 🪄 **Inline Math & Conversions** — Evaluates arithmetic, formulas, unit conversions (`15km to mi =`), and live currency conversions (`100$ + 2€ =`) directly inside text.
+- 📂 **Folders, Categories & Hashtags** — Categorize notes into custom folders and tag them with `#tags` for effortless indexing.
+- 📝 **Markdown & Plain Text Modes** — Full GFM support, live side-by-side preview, formatting toolbar, or switch to distraction-free Simple Mode.
+- 🎨 **Dynamic Design Systems** — 5 standard themes + 3 full layout transformations (**Liquid Glass**, **Win 96**, and **Hacker Terminal**).
+- 🔒 **Client-Side Encryption** — Export/import full workspace backups using local **AES-GCM encryption** with custom passphrases.
+- 📤 **Rich Exports** — Export notes instantly to **Markdown (.md)**, **Plain Text (.txt)**, **Word (.docx)**, or **PDF**.
+- ⚡ **Offline PWA** — Install directly to desktop or mobile with instant load speeds and zero network dependency.
 
 ---
 
-## 🪄 Magic Calculations
+## 🪄 Inline Magic Calculations
 
-End any expression with `=` and Fastnote inserts the result. Press `Space` or `Tab` to accept, or keep typing to commit.
+Fastnote automatically calculates any math expression or conversion ending with `=`. 
+Press `Space` or `Tab` to accept the inline auto-calculated result.
 
-| Expression | Result |
+| Expression | Evaluated Result |
 |---|---|
 | `(12 + 8) * 5 =` | `100` |
 | `sqrt(144) =` | `12` |
@@ -39,96 +44,68 @@ End any expression with `=` and Fastnote inserts the result. Press `Space` or `T
 | `x = 5` → `x * 3 =` | `15` |
 | `100km to mi =` | `62.14 mi` |
 | `15kg to lbs =` | `33.07 lbs` |
-| `100$ + 2€ =` | live rate |
-
-Supports arithmetic, variables, trig/log/scientific functions, unit conversions (length, weight, temp, …), and live currency rates.
+| `100$ + 2€ =` | Live exchange rate result |
 
 ---
 
-## 📝 Editor
+## 🎨 Layout Themes
 
-Two modes, switchable in Settings:
+Transform the app's visual identity, chrome, typography, and structure:
 
-- **Markdown** — GFM, formatting toolbar, live preview, side-by-side split on desktop
-- **Simple** — plain text, zero distractions
-
-Toolbar: `Bold` · `Italic` · `Strikethrough` · `Heading` · `Divider` · `Bullet list` · `Numbered list` · `Task list` · `Link` · `Image` · `Blockquote` · `Code block`
-
-Each note exports as **TXT · Markdown · DOCX · PDF** or sends to the printer.
-
----
-
-## 🎨 Themes
-
-5 standard color themes plus 3 fully custom themes that **reimagine the layout, chrome, and typography** — not just the palette.
-
-| Theme | Type | Description |
+| Theme | Type | Visual Style |
 |---|---|---|
-| Light | Standard | Clean light mode |
-| Dark | Standard | Dark mode |
-| Pink | Standard | Soft pastel (DaisyUI cupcake) |
-| Forest | Standard | Deep forest green |
-| Luxury | Standard | Black & gold |
-| **Liquid Glass** | Custom | Frosted glass panels over a gradient backdrop |
-| **Win 96** | Custom | Windows 95/96 chrome — title bar, menu bar, inset fields, status bar |
-| **Hacker** | Custom | Terminal green-on-black, `ls` note list, CRT scanlines |
+| **Liquid Glass** | Custom | Ambient multi-radial mesh gradients with frosted glass reflection panels |
+| **Win 96** | Custom | Nostalgic Windows 95/96 desktop chrome with title bar & status bar |
+| **Hacker** | Custom | CRT green-on-black terminal layout with vim status line & `ls` list |
+| **Light / Dark** | Standard | Modern minimal light and dark themes |
+| **Cupcake / Forest / Luxury** | Standard | Soft pastel, deep emerald green, and black & gold palettes |
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## ⌨️ Command Palette & Keyboard Shortcuts
+
+Press `Ctrl + K` (or `⌘ + K` on macOS) to launch the instant command palette:
 
 | Shortcut | Action |
 |---|---|
-| `Ctrl K` | Command palette |
-| `Ctrl N` | New note |
-| `Ctrl /` | Focus search |
-| `Ctrl B` | Toggle sidebar |
-| `Ctrl ,` | Open settings |
-
-On macOS use `⌘` instead of `Ctrl`.
+| `Ctrl + K` | Launch Command Palette |
+| `Ctrl + N` | Create a new note |
+| `Ctrl + /` | Jump to search input |
+| `Ctrl + B` | Toggle sidebar / mobile navigation |
+| `Ctrl + ,` | Open Settings modal |
 
 ---
 
-## 💾 Backup & Restore
-
-Settings → Data → export all notes to an AES-GCM encrypted `.fastnote` file. Import on any device with the same passphrase. No cloud, no intermediary.
-
----
-
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ```bash
+# Clone and install dependencies
+git clone https://github.com/alexandrus21a/Fastnote.git
+cd Fastnote
 npm install
+
+# Start development server
 npm run dev
-```
 
-Open [http://localhost:5173](http://localhost:5173)
-
-```bash
-# Production build
+# Build for production
 npm run build
 npm run preview
 ```
 
 ---
 
-## 🛠 Stack
+## 🛡 Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | React 19 + TypeScript |
-| Build | Vite 8 |
-| Styling | Tailwind CSS v4 + DaisyUI 5 |
-| Markdown | react-markdown + remark-gfm |
-| Icons | lucide-react |
-| Word export | docx |
-| PDF export | jsPDF + html2canvas |
-| i18n | i18next (EN + RU) |
-| PWA | vite-plugin-pwa |
-| Crypto | Web Crypto API (AES-GCM) |
+- **Core Framework**: React 19, TypeScript 5.8
+- **Build Tool**: Vite 8
+- **Design & Layout**: Tailwind CSS v4, DaisyUI 5, Lucide Icons
+- **Markdown & Math**: `react-markdown`, `remark-gfm`
+- **Exports**: `docx`, `jspdf`, `html2canvas`
+- **Localization**: `i18next` (English, Russian)
+- **PWA & Storage**: `vite-plugin-pwa`, `localStorage`, Web Crypto API (AES-GCM)
 
 ---
 
-## License
+## 📄 License
 
-MIT
+Distributed under the MIT License. See `LICENSE` for details.

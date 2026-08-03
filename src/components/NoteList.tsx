@@ -193,11 +193,11 @@ export function NoteList({
           </div>
           <div className="px-4 pb-3">
             <div className="relative">
-              <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-base-content/25" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/25" />
               <input
                 ref={searchRef}
                 type="text"
-                className="w-full pl-8 pr-3 h-8 text-[13px] bg-base-200/40 border border-transparent focus:border-base-300/60 focus:bg-base-100 rounded-lg outline-none transition-all placeholder:text-base-content/25"
+                className="w-full pl-8 pr-3 h-8 text-[13px] bg-base-200/60 border border-transparent focus:border-base-300/60 focus:bg-base-100 rounded-full outline-none transition-all placeholder:text-base-content/25 shadow-inner"
                 placeholder="Search notes..."
                 value={search}
                 onChange={(e) => onSearchChange(e.target.value)}
